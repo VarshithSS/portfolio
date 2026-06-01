@@ -10,7 +10,7 @@ const BOOT_LINES = [
 
   { text: 'Loading modules...',                     cls: 't-dim',   delay: 200 },
 
-  { text: 'System online.',                         cls: 't-green', delay: 200 },
+  { text: 'System online.',                         cls: 't-green', delay: 200},
 
 ];
 

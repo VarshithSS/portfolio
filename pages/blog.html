@@ -1,0 +1,533 @@
+<!-- pages/blog.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog — Singampalli Sri Varshith</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+
+  <style>
+    /* ── Design tokens (mirrored from portfolio) ── */
+    :root {
+      --bg:        #080c12;
+      --surface:   #0d1117;
+      --border:    rgba(255,255,255,0.07);
+      --muted:     #8b929e;
+      --slate:     #4a5568;
+      --soft:      #cdd3de;
+      --cyan:      #22D3EE;
+      --purple:    #8B5CF6;
+      --green:     #10B981;
+      --amber:     #F59E0B;
+      --red:       #EF4444;
+      --font-mono: 'JetBrains Mono', monospace;
+      --font-display: 'Syne', sans-serif;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--soft);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Background grid ── */
+    .grid-bg {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    /* ── Orbs ── */
+    .orb {
+      position: fixed; border-radius: 50%; pointer-events: none; z-index: 0;
+      filter: blur(80px); opacity: 0.12;
+    }
+    .orb1 { width: 500px; height: 500px; background: radial-gradient(circle, #22D3EE 0%, transparent 70%); top: -120px; right: -80px; }
+    .orb2 { width: 400px; height: 400px; background: radial-gradient(circle, #8B5CF6 0%, transparent 70%); bottom: -80px; left: -80px; }
+
+    /* ── Layout ── */
+    .layout {
+      position: relative; z-index: 1;
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      min-height: 100vh;
+    }
+
+    /* ── Side panel ── */
+    /* Side panel */
+    .side-panel {
+      position: sticky; top: 0; height: 100vh;
+      border-right: 0.5px solid var(--border);
+      overflow-y: auto;
+      opacity: 0;
+      animation: slide-up 0.5s 0.1s ease forwards;
+      background: rgba(9, 13, 22, 0.97);
+      backdrop-filter: blur(20px);
+      display: flex; flex-direction: column;
+    }
+    .panel-inner {
+      padding: 28px 18px; flex: 1;
+      display: flex; flex-direction: column;
+      position: relative; overflow: hidden;
+    }
+    .panel-inner::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(139,92,246,0.4), transparent);
+    }
+    .panel-brand {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 32px; padding-bottom: 20px;
+      border-bottom: 0.5px solid rgba(255,255,255,0.06);
+    }
+    .panel-brand-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--cyan);
+      animation: pulse-green 2s ease-in-out infinite; flex-shrink: 0;
+    }
+    .panel-brand-name {
+      font-family: var(--font-display); font-size: 13px;
+      font-weight: 700; color: var(--soft); letter-spacing: 0.3px;
+    }
+    .panel-label {
+      font-size: 9px; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--slate);
+      margin-bottom: 8px; padding-left: 2px;
+    }
+    .panel-nav { display: flex; flex-direction: column; gap: 2px; margin-bottom: 24px; }
+    .panel-link {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 12px; border-radius: var(--radius-sm);
+      font-size: 13px; color: var(--muted);
+      border: 0.5px solid transparent;
+      transition: all var(--transition);
+    }
+    .panel-link:hover { color: var(--cyan); background: rgba(34,211,238,0.06); border-color: rgba(34,211,238,0.15); }
+    .panel-link.active { color: var(--cyan); background: rgba(34,211,238,0.07); border-color: rgba(34,211,238,0.2); }
+    .panel-link-icon { display: flex; align-items: center; justify-content: center; width: 16px; flex-shrink: 0; color: inherit; opacity: 0.7; }
+    .panel-link:hover .panel-link-icon, .panel-link.active .panel-link-icon { opacity: 1; }
+    .panel-divider { height: 0.5px; background: rgba(255,255,255,0.06); margin: 16px 0; }
+    .panel-status {
+      margin-top: auto; display: flex; align-items: center; gap: 7px;
+      font-size: 9px; color: var(--slate);
+      padding: 16px 2px 0; border-top: 0.5px solid rgba(255,255,255,0.06);
+    }
+    .status-dot {
+      width: 5px; height: 5px; border-radius: 50%; background: var(--green);
+      animation: pulse-green 2s ease-in-out infinite; flex-shrink: 0;
+    }
+    /* ── Main column ── */
+    .main-col { display: flex; flex-direction: column; min-height: 100vh; overflow: hidden; }
+
+    /* ── Topbar ── */
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 24px; height: 44px;
+      border-bottom: 0.5px solid var(--border);
+      background: rgba(8,12,18,0.7);
+      backdrop-filter: blur(8px);
+      position: sticky; top: 0; z-index: 10;
+      flex-shrink: 0;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 10px; }
+    .dots { display: flex; gap: 5px; }
+    .dot { width: 9px; height: 9px; border-radius: 50%; }
+    .dot-r { background: #FF5F57; }
+    .dot-y { background: #FFBD2E; }
+    .dot-g { background: #28CA42; }
+    .topbar-path { font-size: 11px; color: var(--slate); }
+    .topbar-path a { color: var(--slate); text-decoration: none; }
+    .topbar-right { display: flex; align-items: center; gap: 12px; }
+    .online-status { display: flex; align-items: center; gap: 5px; font-size: 10px; color: var(--slate); }
+    .online-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--green); animation: pulse-green 2s ease-in-out infinite; }
+
+    /* ── Page content ── */
+    .page-content { padding: 28px 28px 60px; flex: 1; }
+
+    /* ── Page header ── */
+    .page-header {
+      margin-bottom: 32px;
+      opacity: 0;
+      animation: slide-up 0.5s 0.15s ease forwards;
+    }
+    .page-header-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 8px; }
+    .page-title {
+      font-family: var(--font-display);
+      font-size: clamp(22px, 3vw, 32px);
+      font-weight: 800;
+      letter-spacing: -1px;
+      background: linear-gradient(90deg, #22D3EE 0%, #8B5CF6 60%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .post-count {
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--slate);
+      border: 0.5px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 20px;
+    }
+    .page-sub { font-size: 12px; color: var(--muted); }
+
+    /* ── Section label ── */
+    .section-label {
+      font-size: 9px; letter-spacing: 2.5px; text-transform: uppercase;
+      color: var(--slate); margin-bottom: 16px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .section-label::after { content: ''; flex: 1; height: 0.5px; background: var(--border); }
+
+    @keyframes slide-up {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Featured Blog Card ── */
+    .featured-post {
+      background: rgba(17,24,39,0.7);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin-bottom: 28px;
+      opacity: 0;
+      animation: slide-up 0.55s 0.3s ease forwards;
+      position: relative;
+      transition: border-color 0.22s ease, transform 0.22s ease;
+      cursor: pointer;
+    }
+    .featured-post::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 1.5px;
+      background: linear-gradient(90deg, transparent, var(--cyan), var(--purple), transparent);
+    }
+    .featured-post:hover { border-color: rgba(34,211,238,0.3); transform: translateY(-2px); }
+
+    .featured-banner {
+      height: 180px;
+      background: linear-gradient(135deg, rgba(34,211,238,0.06) 0%, rgba(139,92,246,0.1) 50%, rgba(16,185,129,0.06) 100%);
+      position: relative;
+      display: flex; align-items: center; justify-content: center;
+      border-bottom: 0.5px solid var(--border);
+      overflow: hidden;
+    }
+    .featured-banner-code {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      color: rgba(34,211,238,0.25);
+      line-height: 1.9;
+      position: absolute;
+      top: 12px; left: 16px; right: 16px;
+      pointer-events: none;
+      user-select: none;
+    }
+    .featured-banner-code .kw  { color: rgba(139,92,246,0.35); }
+    .featured-banner-code .fn  { color: rgba(34,211,238,0.35); }
+    .featured-banner-code .str { color: rgba(16,185,129,0.35); }
+    .featured-banner-code .cm  { color: rgba(255,255,255,0.12); }
+    .featured-badge {
+      position: absolute; top: 12px; right: 12px;
+      font-size: 8px; letter-spacing: 1.5px; text-transform: uppercase;
+      padding: 3px 8px; border-radius: 2px;
+      background: rgba(34,211,238,0.12); border: 0.5px solid rgba(34,211,238,0.3);
+      color: var(--cyan);
+    }
+
+    .featured-body { padding: 20px 22px; }
+    .post-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+    .post-tag {
+      font-size: 9px; letter-spacing: 1px; text-transform: uppercase;
+      padding: 2px 8px; border-radius: 2px;
+    }
+    .post-tag.ml  { background: rgba(139,92,246,0.08); border: 0.5px solid rgba(139,92,246,0.22); color: var(--purple); }
+    .post-tag.llm { background: rgba(34,211,238,0.08); border: 0.5px solid rgba(34,211,238,0.22); color: var(--cyan); }
+    .post-tag.cp  { background: rgba(245,158,11,0.08); border: 0.5px solid rgba(245,158,11,0.22); color: var(--amber); }
+    .post-tag.eng { background: rgba(16,185,129,0.08); border: 0.5px solid rgba(16,185,129,0.22); color: var(--green); }
+    .post-date { font-size: 9.5px; color: var(--slate); }
+    .read-time { font-size: 9.5px; color: var(--slate); }
+    .meta-dot { color: var(--slate); font-size: 8px; }
+
+    .post-title {
+      font-family: var(--font-display);
+      font-size: clamp(15px, 2vw, 19px);
+      font-weight: 700;
+      color: var(--soft);
+      letter-spacing: -0.3px;
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+    .post-excerpt { font-size: 12px; color: var(--muted); line-height: 1.8; margin-bottom: 16px; }
+    .post-footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+    .post-pills { display: flex; flex-wrap: wrap; gap: 5px; }
+    .post-pill {
+      font-size: 9.5px; padding: 2px 7px; border-radius: 2px;
+      background: rgba(255,255,255,0.04); border: 0.5px solid var(--border); color: var(--muted);
+    }
+    .read-link {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 10.5px; color: var(--cyan);
+      text-decoration: none; transition: gap 0.18s ease;
+      letter-spacing: 0.3px;
+    }
+    .read-link:hover { gap: 8px; }
+
+    /* ── Blog grid (secondary posts) ── */
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 16px;
+      opacity: 0;
+      animation: slide-up 0.55s 0.45s ease forwards;
+    }
+
+    .blog-card {
+      background: rgba(17,24,39,0.65);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.22s ease, transform 0.22s ease;
+      cursor: pointer;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .blog-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      opacity: 0; transition: opacity 0.22s ease;
+    }
+    .blog-card.purple-accent::before { background: linear-gradient(90deg, transparent, rgba(139,92,246,0.5), transparent); }
+    .blog-card.amber-accent::before  { background: linear-gradient(90deg, transparent, rgba(245,158,11,0.5),  transparent); }
+    .blog-card:hover { transform: translateY(-2px); }
+    .blog-card.purple-accent:hover { border-color: rgba(139,92,246,0.3); }
+    .blog-card.amber-accent:hover  { border-color: rgba(245,158,11,0.3); }
+    .blog-card:hover::before { opacity: 1; }
+
+    .card-number {
+      position: absolute; top: 14px; right: 14px;
+      font-size: 28px; font-weight: 800; font-family: var(--font-display);
+      color: rgba(255,255,255,0.03); line-height: 1; user-select: none;
+      letter-spacing: -2px;
+    }
+    .blog-card .post-title { font-size: 13.5px; margin-bottom: 0; }
+    .blog-card .post-excerpt { font-size: 11.5px; margin-bottom: 0; flex: 1; }
+    .card-footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px; margin-top: auto; }
+
+    /* ── Empty state (hidden when posts exist) ── */
+    .empty-state {
+      display: none;
+      text-align: center; padding: 60px 20px;
+      color: var(--slate); font-size: 12px;
+    }
+
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .layout { grid-template-columns: 1fr; }
+      .side-panel { display: none; }
+      .page-content { padding: 20px 16px 48px; }
+      .blog-grid { grid-template-columns: 1fr; }
+      .subscribe-strip { flex-direction: column; align-items: flex-start; }
+      .sub-input { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="grid-bg" aria-hidden="true"></div>
+  <div class="orb orb1" aria-hidden="true"></div>
+  <div class="orb orb2" aria-hidden="true"></div>
+
+  <div class="layout">
+
+    <!-- LEFT PANEL -->
+    <aside class="side-panel" aria-label="Navigation">
+      <div class="panel-inner">
+        <div class="panel-brand">
+          <span class="panel-brand-dot" aria-hidden="true"></span>
+          <span class="panel-brand-name">Sri Varshith</span>
+        </div>
+        <div class="panel-label">Pages</div>
+        <nav class="panel-nav">
+          <a class="panel-link" href="../index.html">
+            <span class="panel-link-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg></span>
+            Home
+          </a>
+          <a class="panel-link" href="about.html">
+            <span class="panel-link-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></span>
+            About
+          </a>
+          <a class="panel-link active" href="projects.html">
+            <span class="panel-link-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>
+            Projects
+          </a>
+          <a class="panel-link" href="research.html">
+            <span class="panel-link-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2v-4M9 21H5a2 2 0 01-2-2v-4m0 0h18"/></svg></span>
+            Research
+          </a>
+          <a class="panel-link" href="blog.html">
+            <span class="panel-link-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></span>
+            Blog
+          </a>
+          <a class="panel-link" href="contact.html">
+            <span class="panel-link-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
+            Contact
+          </a>
+        </nav>
+        <div class="panel-divider" aria-hidden="true"></div>
+        <div class="panel-status">
+          <span class="status-dot" aria-hidden="true"></span>
+          <span>system online</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN COLUMN -->
+    <div class="main-col">
+
+      <!-- TOP BAR -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <div class="dots" aria-hidden="true">
+            <div class="dot dot-r"></div>
+            <div class="dot dot-y"></div>
+            <div class="dot dot-g"></div>
+          </div>
+          <span class="topbar-path">
+            <a href="../">~/portfolio</a> / blog
+          </span>
+        </div>
+        <div class="topbar-right">
+          <span class="online-status">
+            <span class="online-dot" aria-hidden="true"></span>online
+          </span>
+        </div>
+      </header>
+
+      <!-- PAGE CONTENT -->
+      <div class="page-content">
+
+        <!-- PAGE HEADER -->
+        <div class="page-header">
+          <div class="page-header-top">
+            <h1 class="page-title">Blog</h1>
+            <span class="post-count">2 posts</span>
+          </div>
+          <p class="page-sub">Thoughts on ML, competitive programming, and the occasional tangent.</p>
+        </div>
+
+        <!-- FEATURED POST -->
+        <div class="section-label">Featured</div>
+        <article class="featured-post" role="article">
+          <div class="featured-banner">
+            <div class="featured-banner-code" aria-hidden="true">
+<span class="cm"># Giving an LLM a browser and watching what happens</span>
+<span class="kw">from</span> playwright.sync_api <span class="kw">import</span> sync_playwright
+<span class="kw">from</span> langchain.agents <span class="kw">import</span> AgentExecutor
+
+<span class="kw">def</span> <span class="fn">run_browser_agent</span>(task: str) -> str:
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm"># the moment it navigated to a page I didn't expect</span>
+&nbsp;&nbsp;&nbsp;&nbsp;agent = AgentExecutor(tools=[<span class="fn">navigate</span>, <span class="fn">click</span>, <span class="fn">extract</span>])
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="kw">return</span> agent.invoke({<span class="str">"input"</span>: task})
+            </div>
+            <span class="featured-badge">Featured</span>
+          </div>
+          <div class="featured-body">
+            <div class="post-meta">
+              <span class="post-tag llm">LLMs</span>
+              <span class="post-tag ml">Agents</span>
+              <span class="meta-dot">·</span>
+              <span class="post-date">June 14, 2025</span>
+              <span class="meta-dot">·</span>
+              <span class="read-time">8 min read</span>
+            </div>
+            <h2 class="post-title">When I Gave an LLM a Browser: Lessons from Building a Web Agent from Scratch</h2>
+            <p class="post-excerpt">
+              I spent three weeks building a browser automation agent powered by GPT-4 and Playwright. What started as a weekend experiment became a deep rabbit hole into tool-calling, failure modes, and the surprisingly hard problem of teaching a model to "see" a webpage. Here's everything I learned — including the mistakes I'd rather forget.
+            </p>
+            <div class="post-footer">
+              <div class="post-pills">
+                <span class="post-pill">Playwright</span>
+                <span class="post-pill">LangChain</span>
+                <span class="post-pill">GPT-4</span>
+                <span class="post-pill">Tool Use</span>
+              </div>
+              <a class="read-link" href="#" aria-label="Read full post">
+                Read post <span aria-hidden="true">→</span>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- MORE POSTS -->
+        <div class="section-label" style="margin-top: 4px;">All Posts</div>
+        <div class="blog-grid">
+
+          <!-- Post 1 -->
+          <article class="blog-card purple-accent" role="article">
+            <span class="card-number" aria-hidden="true">01</span>
+            <div class="post-meta">
+              <span class="post-tag llm">LLMs</span>
+              <span class="post-tag ml">Agents</span>
+            </div>
+            <h2 class="post-title">When I Gave an LLM a Browser: Lessons from Building a Web Agent from Scratch</h2>
+            <p class="post-excerpt">
+              Three weeks, a tonne of Playwright logs, and one surprisingly philosophical conclusion about model autonomy. A hands-on breakdown of what actually goes wrong when you hand an LLM real browser control.
+            </p>
+            <div class="card-footer">
+              <div style="display:flex; gap:6px; align-items:center;">
+                <span class="post-date" style="font-size:9.5px; color:var(--slate);">June 14, 2025</span>
+                <span style="color:var(--slate); font-size:8px;">·</span>
+                <span class="read-time" style="font-size:9.5px; color:var(--slate);">8 min</span>
+              </div>
+              <a class="read-link" href="#" aria-label="Read post">Read →</a>
+            </div>
+          </article>
+
+          <!-- Post 2 -->
+          <article class="blog-card amber-accent" role="article">
+            <span class="card-number" aria-hidden="true">02</span>
+            <div class="post-meta">
+              <span class="post-tag cp">Competitive Programming</span>
+            </div>
+            <h2 class="post-title">From 1200 to Specialist: What Actually Improved My Codeforces Rating</h2>
+            <p class="post-excerpt">
+              A year of grinding, two failed div-2 rounds, and one honest retrospective. I stopped chasing hard problems and started understanding why I was getting easy ones wrong — here's the shift that changed everything.
+            </p>
+            <div class="card-footer">
+              <div style="display:flex; gap:6px; align-items:center;">
+                <span class="post-date" style="font-size:9.5px; color:var(--slate);">May 3, 2025</span>
+                <span style="color:var(--slate); font-size:8px;">·</span>
+                <span class="read-time" style="font-size:9.5px; color:var(--slate);">6 min</span>
+              </div>
+              <a class="read-link" href="#" aria-label="Read post" style="color:var(--amber);">Read →</a>
+            </div>
+          </article>
+
+        </div>
+
+
+
+      </div><!-- /page-content -->
+    </div><!-- /main-col -->
+  </div><!-- /layout -->
+
+</body>
+</html>

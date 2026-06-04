@@ -45,7 +45,7 @@
       min-height: 100vh; align-items: stretch;
     }
 
-    /* Side panel — identical to other pages */
+    /* Side panel — styles shared with sidebar.js output */
     .side-panel {
       position: sticky; top: 0; height: 100vh;
       border-right: 0.5px solid var(--border); overflow-y: auto;
@@ -142,9 +142,7 @@
       padding: 3px 9px; border-radius: 3px; border: 0.5px solid;
       color: var(--purple); border-color: rgba(139,92,246,0.3); background: rgba(139,92,246,0.08);
     }
-    .proj-year {
-      font-size: 10px; color: var(--slate);
-    }
+    .proj-year { font-size: 10px; color: var(--slate); }
     .proj-status {
       display: flex; align-items: center; gap: 5px;
       font-size: 10px; color: var(--green);
@@ -163,8 +161,7 @@
       background-clip: text; margin-bottom: 14px;
     }
     .proj-tagline {
-      font-size: 13px; color: var(--muted); line-height: 1.7;
-      max-width: 580px;
+      font-size: 13px; color: var(--muted); line-height: 1.7; max-width: 580px;
     }
 
     /* Links row */
@@ -195,8 +192,7 @@
     .section-label::after { content: ''; flex: 0 0 32px; height: 0.5px; background: var(--border); }
 
     .section p {
-      font-size: 12.5px; color: var(--muted); line-height: 1.9;
-      margin-bottom: 12px;
+      font-size: 12.5px; color: var(--muted); line-height: 1.9; margin-bottom: 12px;
     }
     .section p:last-child { margin-bottom: 0; }
 
@@ -206,9 +202,7 @@
       display: flex; align-items: flex-start; gap: 10px;
       font-size: 12px; color: var(--muted); line-height: 1.6;
     }
-    .feature-list li::before {
-      content: '→'; color: var(--cyan); flex-shrink: 0; margin-top: 1px;
-    }
+    .feature-list li::before { content: '→'; color: var(--cyan); flex-shrink: 0; margin-top: 1px; }
 
     /* Tech stack pills */
     .tech-pills { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -217,7 +211,6 @@
       border: 0.5px solid var(--border); color: var(--slate);
       background: rgba(17,24,39,0.6);
     }
-
 
     @keyframes slide-up {
       from { opacity: 0; transform: translateY(8px); }
@@ -245,46 +238,8 @@
 
   <div class="layout">
 
-    <aside class="side-panel" aria-label="Navigation">
-      <div class="panel-inner">
-        <div class="panel-brand">
-          <span class="panel-brand-dot" aria-hidden="true"></span>
-          <span class="panel-brand-name">Sri Varshith</span>
-        </div>
-        <div class="panel-label">Pages</div>
-        <nav class="panel-nav">
-          <a class="panel-link" href="../../index.html">
-            <span class="panel-link-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg></span>
-            Home
-          </a>
-          <a class="panel-link" href="../about.html">
-            <span class="panel-link-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></span>
-            About
-          </a>
-          <a class="panel-link active" href="../projects.html">
-            <span class="panel-link-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>
-            Projects
-          </a>
-          <a class="panel-link" href="#">
-            <span class="panel-link-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2v-4M9 21H5a2 2 0 01-2-2v-4m0 0h18"/></svg></span>
-            Research
-          </a>
-          <a class="panel-link" href="#">
-            <span class="panel-link-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></span>
-            Blog
-          </a>
-          <a class="panel-link" href="../contact.html">
-            <span class="panel-link-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
-            Contact
-          </a>
-        </nav>
-        <div class="panel-divider" aria-hidden="true"></div>
-        <div class="panel-status">
-          <span class="status-dot" aria-hidden="true"></span>
-          <span>system online</span>
-        </div>
-      </div>
-    </aside>
+    <!-- Sidebar injected here automatically by sidebar.js -->
+    <div id="sidebar-root"></div>
 
     <div class="main-col">
 
@@ -331,51 +286,53 @@
 
       <div class="content-main">
 
-          <div class="section">
-            <div class="section-label">overview</div>
-            <p>
-              Browser Agent is a fully autonomous web navigation system built on top of a vision-language
-              model. Given a natural language task like "Book a flight from Delhi to Mumbai next Friday under ₹5000",
-              the agent perceives the current browser state, reasons about the next action, and executes it — repeating
-              until the goal is complete or it determines the task is impossible.
-            </p>
-            <p>
-              The agent uses a ReAct-style loop: observe → think → act. Each step, it receives a screenshot
-              (or DOM snapshot) as context, generates a structured action (click, type, scroll, navigate),
-              and dispatches it to a headless Playwright browser.
-            </p>
-          </div>
+        <div class="section">
+          <div class="section-label">overview</div>
+          <p>
+            Browser Agent is a fully autonomous web navigation system built on top of a vision-language
+            model. Given a natural language task like "Book a flight from Delhi to Mumbai next Friday under ₹5000",
+            the agent perceives the current browser state, reasons about the next action, and executes it — repeating
+            until the goal is complete or it determines the task is impossible.
+          </p>
+          <p>
+            The agent uses a ReAct-style loop: observe → think → act. Each step, it receives a screenshot
+            (or DOM snapshot) as context, generates a structured action (click, type, scroll, navigate),
+            and dispatches it to a headless Playwright browser.
+          </p>
+        </div>
 
-          <div class="section">
-            <div class="section-label">key features</div>
-            <ul class="feature-list">
-              <li>Vision + DOM fusion — combines screenshot embeddings with parsed DOM for reliable element targeting</li>
-              <li>Multi-step planning with backtracking when the agent detects it has gone off-course</li>
-              <li>Rate-limit aware retry logic with exponential backoff on LLM API calls</li>
-              <li>Structured action schema enforced via constrained decoding — no free-form hallucination of selectors</li>
-              <li>Session persistence across tabs and page reloads using cookie + localStorage snapshots</li>
-              <li>Evaluation harness with 40+ benchmark tasks spanning e-commerce, forms, and search</li>
-            </ul>
-          </div>
+        <div class="section">
+          <div class="section-label">key features</div>
+          <ul class="feature-list">
+            <li>Vision + DOM fusion — combines screenshot embeddings with parsed DOM for reliable element targeting</li>
+            <li>Multi-step planning with backtracking when the agent detects it has gone off-course</li>
+            <li>Rate-limit aware retry logic with exponential backoff on LLM API calls</li>
+            <li>Structured action schema enforced via constrained decoding — no free-form hallucination of selectors</li>
+            <li>Session persistence across tabs and page reloads using cookie + localStorage snapshots</li>
+            <li>Evaluation harness with 40+ benchmark tasks spanning e-commerce, forms, and search</li>
+          </ul>
+        </div>
 
-
-          <div class="section">
-            <div class="section-label">tech stack</div>
-            <div class="tech-pills">
-              <span class="tech-pill">Python</span>
-              <span class="tech-pill">Playwright</span>
-              <span class="tech-pill">GPT-4o</span>
-              <span class="tech-pill">LangChain</span>
-              <span class="tech-pill">FastAPI</span>
-              <span class="tech-pill">Redis</span>
-              <span class="tech-pill">Docker</span>
-              <span class="tech-pill">Pydantic</span>
-            </div>
+        <div class="section">
+          <div class="section-label">tech stack</div>
+          <div class="tech-pills">
+            <span class="tech-pill">Python</span>
+            <span class="tech-pill">Playwright</span>
+            <span class="tech-pill">GPT-4o</span>
+            <span class="tech-pill">LangChain</span>
+            <span class="tech-pill">FastAPI</span>
+            <span class="tech-pill">Redis</span>
+            <span class="tech-pill">Docker</span>
+            <span class="tech-pill">Pydantic</span>
           </div>
+        </div>
 
       </div>
 
     </div>
   </div>
+
+  <!-- Two levels deep: pages/projects_repo/ → ../../components/sidebar.js -->
+  <script src="../../components/sidebar_projects.js"></script>
 </body>
 </html>

@@ -62,12 +62,7 @@
     .orb2 { width: 400px; height: 400px; background: radial-gradient(circle, #8B5CF6 0%, transparent 70%); bottom: -80px; left: -80px; }
 
     /* ── Layout ── */
-    .layout {
-      position: relative; z-index: 1;
-      display: grid;
-      grid-template-columns: 160px 1fr;
-      min-height: 100vh;
-    }
+    /* grid-template-columns is defined in styles.css — do not override here */
 
     /* ── Main column ── */
     .main-col { display: flex; flex-direction: column; min-height: 100vh; overflow: hidden; }
@@ -376,12 +371,12 @@
           <article class="blog-card purple-accent" role="article">
             <span class="card-number" aria-hidden="true">01</span>
             <div class="post-meta">
-              <span class="post-tag llm">LLMs</span>
-              <span class="post-tag ml">Agents</span>
+              <span class="post-tag llm">Preparation</span>
+              <span class="post-tag ml">GATE</span>
             </div>
-            <h2 class="post-title">When I Gave an LLM a Browser: Lessons from Building a Web Agent from Scratch</h2>
+            <h2 class="post-title">My Journey from Zero to IIT Kanpur</h2>
             <p class="post-excerpt">
-              Three weeks, a tonne of Playwright logs, and one surprisingly philosophical conclusion about model autonomy. A hands-on breakdown of what actually goes wrong when you hand an LLM real browser control.
+              From a kid who barely knew how to code to cracking one of India's toughest engineering entrances, this is the story of my 5-month grind. The wins, the losses, and the mindset shifts that made it all possible.
             </p>
             <div class="card-footer">
               <div style="display:flex; gap:6px; align-items:center;">
@@ -389,7 +384,7 @@
                 <span style="color:var(--slate); font-size:8px;">·</span>
                 <span class="read-time" style="font-size:9.5px; color:var(--slate);">8 min</span>
               </div>
-              <a class="read-link" href="#" aria-label="Read post">Read →</a>
+              <a class="read-link" href="blogs/gate_blog.html" aria-label="Read post">Read →</a>
             </div>
           </article>
 

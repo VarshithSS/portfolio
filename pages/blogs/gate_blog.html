@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My GATE Journey — Sri Varshith</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #0B0F19; --bg2: #111827; --bg3: #0F172A;
+      --cyan: #22D3EE; --purple: #8B5CF6; --green: #10B981;
+      --amber: #F59E0B; --slate: #475569; --muted: #64748B;
+      --soft: #E5E7EB; --border: rgba(34,211,238,0.11);
+      --red: #EF4444;
+      --font-mono: 'JetBrains Mono', monospace;
+      --font-display: 'Syne', sans-serif;
+      --radius-sm: 4px; --radius-md: 8px; --transition: 0.2s ease;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg); color: var(--soft);
+      font-family: var(--font-mono);
+      overflow-x: hidden; -webkit-font-smoothing: antialiased; min-height: 100vh;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    .grid-bg {
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(34,211,238,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(34,211,238,0.025) 1px, transparent 1px);
+      background-size: 44px 44px; pointer-events: none; z-index: 0;
+    }
+    .orb { position: fixed; border-radius: 50%; filter: blur(100px); pointer-events: none; z-index: 0; }
+    .orb1 { width: 500px; height: 500px; background: rgba(34,211,238,0.05); top: -150px; right: -80px; }
+    .orb2 { width: 400px; height: 400px; background: rgba(139,92,246,0.055); bottom: 60px; left: -100px; }
+
+    .layout {
+      position: relative; z-index: 1;
+      display: grid; grid-template-columns: 260px 1fr;
+      min-height: 100vh; align-items: stretch;
+    }
+
+    .side-panel {
+      position: sticky; top: 0; height: 100vh;
+      border-right: 0.5px solid var(--border); overflow-y: auto;
+      opacity: 0; animation: slide-up 0.5s 0.1s ease forwards;
+      background: rgba(9,13,22,0.97); backdrop-filter: blur(20px);
+      display: flex; flex-direction: column;
+    }
+    .panel-inner {
+      padding: 28px 18px; flex: 1;
+      display: flex; flex-direction: column; position: relative; overflow: hidden;
+    }
+    .panel-inner::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(139,92,246,0.4), transparent);
+    }
+    .panel-brand {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 32px; padding-bottom: 20px;
+      border-bottom: 0.5px solid rgba(255,255,255,0.06);
+    }
+    .panel-brand-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--cyan); animation: pulse-green 2s ease-in-out infinite; flex-shrink: 0;
+    }
+    .panel-brand-name { font-family: var(--font-display); font-size: 13px; font-weight: 700; color: var(--soft); }
+    .panel-label { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--slate); margin-bottom: 8px; }
+    .panel-nav { display: flex; flex-direction: column; gap: 2px; margin-bottom: 24px; }
+    .panel-link {
+      display: flex; align-items: center; gap: 10px; padding: 9px 12px;
+      border-radius: var(--radius-sm); font-size: 13px; color: var(--muted);
+      border: 0.5px solid transparent; transition: all var(--transition);
+    }
+    .panel-link:hover { color: var(--cyan); background: rgba(34,211,238,0.06); border-color: rgba(34,211,238,0.15); }
+    .panel-link.active { color: var(--cyan); background: rgba(34,211,238,0.07); border-color: rgba(34,211,238,0.2); }
+    .panel-link-icon { display: flex; align-items: center; justify-content: center; width: 16px; flex-shrink: 0; color: inherit; opacity: 0.7; }
+    .panel-link:hover .panel-link-icon, .panel-link.active .panel-link-icon { opacity: 1; }
+    .panel-divider { height: 0.5px; background: rgba(255,255,255,0.06); margin: 16px 0; }
+    .panel-status {
+      margin-top: auto; display: flex; align-items: center; gap: 7px;
+      font-size: 9px; color: var(--slate);
+      padding: 16px 2px 0; border-top: 0.5px solid rgba(255,255,255,0.06);
+    }
+    .status-dot {
+      width: 5px; height: 5px; border-radius: 50%; background: var(--green);
+      animation: pulse-green 2s ease-in-out infinite; flex-shrink: 0;
+    }
+
+    /* Main col */
+    .main-col { min-width: 0; padding: 24px 40px 80px; display: flex; flex-direction: column; max-width: 860px; }
+
+    /* Topbar */
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      border: 0.5px solid var(--border); background: rgba(17,24,39,0.75);
+      backdrop-filter: blur(14px); border-radius: var(--radius-md);
+      padding: 7px 14px; margin-bottom: 28px;
+      font-size: 11px; color: var(--muted);
+    }
+    .topbar-left { display: flex; align-items: center; gap: 10px; }
+    .dots { display: flex; gap: 6px; align-items: center; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; }
+    .dot-r { background: #EF4444; } .dot-y { background: #F59E0B; } .dot-g { background: #10B981; }
+    .topbar-path { color: var(--slate); }
+    .online-status { display: flex; align-items: center; gap: 5px; font-size: 10px; }
+    .online-dot {
+      display: inline-block; width: 6px; height: 6px;
+      border-radius: 50%; background: var(--green);
+      animation: pulse-green 2s ease-in-out infinite;
+    }
+
+    /* Back link */
+    .back-link {
+      display: inline-flex; align-items: center; gap: 7px;
+      font-size: 11px; color: var(--muted); margin-bottom: 28px;
+      opacity: 0; animation: slide-up 0.4s 0.15s ease forwards;
+      transition: color var(--transition);
+    }
+    .back-link:hover { color: var(--cyan); }
+    .back-link svg { transition: transform var(--transition); }
+    .back-link:hover svg { transform: translateX(-3px); }
+
+    /* Post header */
+    .post-header {
+      margin-bottom: 36px;
+      opacity: 0; animation: slide-up 0.5s 0.2s ease forwards;
+      padding-bottom: 28px;
+      border-bottom: 0.5px solid var(--border);
+    }
+    .post-meta-row {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 14px; flex-wrap: wrap;
+    }
+    .post-tag {
+      font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase;
+      padding: 3px 9px; border-radius: 3px; border: 0.5px solid;
+    }
+    .tag-gate { color: var(--amber); border-color: rgba(245,158,11,0.3); background: rgba(245,158,11,0.08); }
+    .tag-personal { color: var(--purple); border-color: rgba(139,92,246,0.3); background: rgba(139,92,246,0.08); }
+    .post-date { font-size: 10px; color: var(--slate); }
+    .read-time { font-size: 10px; color: var(--slate); }
+    .meta-sep { color: var(--slate); font-size: 8px; }
+
+    .post-title {
+      font-family: var(--font-display);
+      font-size: clamp(24px, 4vw, 40px);
+      font-weight: 800; letter-spacing: -1.5px; line-height: 1.1;
+      background: linear-gradient(90deg, #F59E0B 0%, #8B5CF6 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; margin-bottom: 14px;
+    }
+    .post-subtitle {
+      font-size: 13px; color: var(--muted); line-height: 1.8; max-width: 600px;
+    }
+
+    /* Article body */
+    .post-body {
+      opacity: 0; animation: slide-up 0.5s 0.35s ease forwards;
+    }
+
+    /* Section */
+    .section { margin-bottom: 36px; }
+    .section-label {
+      font-size: 9px; letter-spacing: 2.5px; text-transform: uppercase;
+      color: var(--cyan); margin-bottom: 14px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .section-label::after { content: ''; flex: 0 0 32px; height: 0.5px; background: var(--border); }
+
+    .section p {
+      font-size: 13px; color: var(--muted); line-height: 2;
+      margin-bottom: 14px;
+    }
+    .section p:last-child { margin-bottom: 0; }
+    .section p strong { color: var(--soft); font-weight: 500; }
+
+    /* Timeline / phase cards */
+    .timeline { display: flex; flex-direction: column; gap: 2px; margin-bottom: 4px; }
+    .tl-item {
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      gap: 16px;
+      padding: 14px 0;
+      border-bottom: 0.5px solid rgba(255,255,255,0.04);
+      align-items: start;
+    }
+    .tl-item:last-child { border-bottom: none; }
+    .tl-period {
+      font-size: 9.5px; color: var(--cyan); letter-spacing: 0.5px;
+      padding-top: 2px; line-height: 1.5;
+    }
+    .tl-content { }
+    .tl-title {
+      font-size: 12.5px; color: var(--soft); font-weight: 500;
+      margin-bottom: 5px;
+    }
+    .tl-desc {
+      font-size: 11.5px; color: var(--muted); line-height: 1.8;
+    }
+
+    /* Tip / callout blocks */
+    .callout {
+      border-radius: var(--radius-md);
+      padding: 16px 18px;
+      margin: 20px 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .callout::before {
+      content: '';
+      position: absolute; top: 0; left: 0; bottom: 0; width: 2px;
+    }
+    .callout-green { background: rgba(16,185,129,0.06); border: 0.5px solid rgba(16,185,129,0.18); }
+    .callout-green::before { background: var(--green); }
+    .callout-red { background: rgba(239,68,68,0.06); border: 0.5px solid rgba(239,68,68,0.18); }
+    .callout-red::before { background: var(--red); }
+    .callout-amber { background: rgba(245,158,11,0.06); border: 0.5px solid rgba(245,158,11,0.18); }
+    .callout-amber::before { background: var(--amber); }
+
+    .callout-label {
+      font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase;
+      margin-bottom: 7px;
+    }
+    .callout-green .callout-label { color: var(--green); }
+    .callout-red .callout-label { color: var(--red); }
+    .callout-amber .callout-label { color: var(--amber); }
+    .callout p {
+      font-size: 12px; line-height: 1.8; margin-bottom: 0 !important;
+    }
+    .callout-green p { color: rgba(16,185,129,0.85); }
+    .callout-red p { color: rgba(239,68,68,0.85); }
+    .callout-amber p { color: rgba(245,158,11,0.85); }
+
+    /* Mistake / tip list */
+    .point-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .point-list li {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 12.5px; color: var(--muted); line-height: 1.75;
+    }
+    .point-list li .icon { flex-shrink: 0; margin-top: 2px; font-size: 13px; }
+    .point-list li strong { color: var(--soft); font-weight: 500; }
+
+    /* Result card */
+    .result-card {
+      background: rgba(17,24,39,0.7);
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 20px 22px;
+      position: relative; overflow: hidden;
+    }
+    .result-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(245,158,11,0.5), transparent);
+    }
+    .result-stats {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px; margin-bottom: 14px;
+    }
+    .stat { text-align: center; }
+    .stat-val {
+      font-family: var(--font-display);
+      font-size: 26px; font-weight: 800; letter-spacing: -1px;
+      line-height: 1;
+    }
+    .stat-val.amber { color: var(--amber); }
+    .stat-val.green { color: var(--green); }
+    .stat-val.muted { color: var(--muted); }
+    .stat-label {
+      font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase;
+      color: var(--slate); margin-top: 5px;
+    }
+    .result-note {
+      font-size: 11.5px; color: var(--muted); line-height: 1.8;
+      border-top: 0.5px solid rgba(255,255,255,0.05); padding-top: 14px;
+    }
+
+    /* Post footer */
+    .post-footer-divider {
+      height: 0.5px; background: var(--border); margin: 40px 0 28px;
+    }
+    .post-footer-note {
+      font-size: 11.5px; color: var(--slate); line-height: 1.8;
+      font-style: italic;
+    }
+
+    @keyframes slide-up {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse-green {
+      0%,100% { box-shadow: 0 0 0 0 rgba(16,185,129,0.5); }
+      50%      { box-shadow: 0 0 0 5px rgba(16,185,129,0); }
+    }
+
+    @media (max-width: 680px) {
+      .layout { grid-template-columns: 1fr; }
+      .side-panel { position: static; height: auto; border-right: none; border-bottom: 0.5px solid var(--border); }
+      .panel-nav { flex-direction: row; flex-wrap: wrap; gap: 4px; }
+      .panel-link { padding: 5px 10px; font-size: 11px; }
+      .main-col { padding: 16px 18px 60px; }
+      .result-stats { grid-template-columns: 1fr 1fr; }
+      .tl-item { grid-template-columns: 80px 1fr; gap: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="grid-bg" aria-hidden="true"></div>
+  <div class="orb orb1" aria-hidden="true"></div>
+  <div class="orb orb2" aria-hidden="true"></div>
+
+  <div class="layout">
+
+    <!-- Sidebar injected here automatically by sidebar.js -->
+    <div id="sidebar-root"></div>
+
+    <div class="main-col">
+
+      <header class="topbar">
+        <div class="topbar-left">
+          <div class="dots" aria-hidden="true">
+            <div class="dot dot-r"></div>
+            <div class="dot dot-y"></div>
+            <div class="dot dot-g"></div>
+          </div>
+          <span class="topbar-path">~/portfolio/blog/gate-journey</span>
+        </div>
+        <div class="topbar-right">
+          <span class="online-status">
+            <span class="online-dot" aria-hidden="true"></span>online
+          </span>
+        </div>
+      </header>
+
+      <a class="back-link" href="../blog.html">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 12H5m7-7-7 7 7 7"/></svg>
+        back to blog
+      </a>
+
+      <!-- POST HEADER -->
+      <div class="post-header">
+        <div class="post-meta-row">
+          <span class="post-tag tag-gate">GATE</span>
+          <span class="post-tag tag-personal">Personal</span>
+          <span class="meta-sep">·</span>
+          <span class="post-date">June 2025</span>
+          <span class="meta-sep">·</span>
+          <span class="read-time">7 min read</span>
+        </div>
+        <h1 class="post-title">My GATE Journey:<br/>What Worked, What Didn't</h1>
+        <p class="post-subtitle">
+          AIR 403. A good rank on paper, a hard shift by luck, and a result that left me both satisfied and restless.
+          Here's everything I'd tell myself if I could start over.
+        </p>
+      </div>
+
+      <!-- POST BODY -->
+      <article class="post-body">
+
+        <!-- INTRO -->
+        <div class="section">
+          <div class="section-label">the beginning</div>
+          <p>
+            I started preparing for GATE in <strong>August 2024</strong>. The generally accepted wisdom is to start by June
+            and give yourself a full seven months. I gave myself five. At the time I didn't think two months would matter
+            that much. Looking back, those two months showed up everywhere — in the rushed syllabus completion, in the
+            compressed revision window, and ultimately, on exam day.
+          </p>
+          <p>
+            That said, I don't regret how I structured the preparation once I actually started.
+            The strategy was sound. The execution had cracks.
+          </p>
+        </div>
+
+        <!-- THE PLAN -->
+        <div class="section">
+          <div class="section-label">the preparation plan</div>
+          <p>
+            I broke the entire preparation into three distinct phases, and sticking to this structure was
+            probably the best decision I made.
+          </p>
+
+          <div class="timeline">
+            <div class="tl-item">
+              <div class="tl-period">Aug – Dec<br/>2024</div>
+              <div class="tl-content">
+                <div class="tl-title">Phase 1 — Syllabus Completion</div>
+                <div class="tl-desc">
+                  Topic by topic: watch lectures, make handwritten notes, then immediately solve PYQs for that topic before moving on.
+                  I bought a dedicated PYQ book, though online resources work just as well.
+                  The key was never moving to the next topic without solving questions from the current one — that's what
+                  converts passive understanding into actual recall.
+                </div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-period">Jan 2025<br/>~30 days</div>
+              <div class="tl-content">
+                <div class="tl-title">Phase 2 — Subject-wise Revision</div>
+                <div class="tl-desc">
+                  3 days per subject, 10 subjects, 30 days. In those three days: revisit the notes I made in Phase 1,
+                  condense them into short revision notes, then solve PYQs a second time.
+                  After that, take topic-wise and full subject tests from a test series.
+                  The short notes you build here become your best friend in the last week.
+                </div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-period">Feb 2025<br/>~30 days</div>
+              <div class="tl-content">
+                <div class="tl-title">Phase 3 — Mock Test Phase</div>
+                <div class="tl-desc">
+                  Mixed-subject tests and full-length mock tests, one of each per day.
+                  Target: at least 10 full tests before exam day.
+                  After every test, analyse every wrong answer. If a question had a clever approach you hadn't seen,
+                  note it down. These collected approaches are worth more than any single revision session.
+                </div>
+              </div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-period">Last week</div>
+              <div class="tl-content">
+                <div class="tl-title">Phase 4 — Final Revisit</div>
+                <div class="tl-desc">
+                  No new material. Go through your short notes, revisit the approaches you collected,
+                  and let things settle. Rest matters here more than you think.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MISTAKES -->
+        <div class="section">
+          <div class="section-label">mistakes I made</div>
+          <p>I'll be direct about this — knowing these going in would have changed my outcome.</p>
+
+          <ul class="point-list">
+            <li>
+              <span class="icon">⚠</span>
+              <span><strong>Late start.</strong> Beginning in August instead of June meant my Phase 1 ran well into December.
+              Ideally, syllabus completion should finish by November so you have a full two months for revision and mocks.
+              Mine finished towards the end of December, leaving everything compressed after that.</span>
+            </li>
+            <li>
+              <span class="icon">⚠</span>
+              <span><strong>Three full mock tests per day.</strong> This is the one I regret the most.
+              During the mock test phase, I was giving three full-length tests a day thinking more exposure meant better preparation.
+              It doesn't. You can't properly analyse three full tests in a day — you end up skimming the review or skipping it entirely.
+              And after a few days of this, the burnout compounds. By the time the exam arrived, I was running on empty.</span>
+            </li>
+          </ul>
+
+          <div class="callout callout-red" style="margin-top: 18px;">
+            <div class="callout-label">the real cost</div>
+            <p>Three mocks a day meant no time to analyse mistakes and a burned-out mind on exam day.
+            One well-analysed mock beats three skimmed ones every single time.</p>
+          </div>
+        </div>
+
+        <!-- EXAM DAY -->
+        <div class="section">
+          <div class="section-label">exam day</div>
+          <p>
+            The paper was lengthy. Not hard — lengthy. The questions themselves were straightforward,
+            but there were enough of them that time pressure became real very quickly.
+            I panicked. And when you panic in GATE, you don't just slow down — you start second-guessing
+            questions you actually know. I made mistakes on problems I could have solved cold any other day.
+          </p>
+          <p>
+            I was expecting 75+ marks. I scored 72. On a different day, with a calmer head, those 3 marks
+            were absolutely there for the taking.
+          </p>
+
+          <div class="callout callout-amber">
+            <div class="callout-label">shift luck</div>
+            <p>
+              My shift turned out to be significantly harder than others. Normalized scoring accounted for this —
+              and honestly, a hard paper in a well-normalised exam can work in your favour if you hold it together.
+              The candidates who did well in hard shifts were the ones who stayed composed and played the long game,
+              not the ones who tried to sprint through every question.
+            </p>
+          </div>
+        </div>
+
+        <!-- RESULT -->
+        <div class="section">
+          <div class="section-label">the result</div>
+          <div class="result-card">
+            <div class="result-stats">
+              <div class="stat">
+                <div class="stat-val amber">62</div>
+                <div class="stat-label">Score / 100</div>
+              </div>
+              <div class="stat">
+                <div class="stat-val green">403</div>
+                <div class="stat-label">AIR</div>
+              </div>
+              <div class="stat">
+                <div class="stat-val muted">75+</div>
+                <div class="stat-label">Expected</div>
+              </div>
+            </div>
+            <div class="result-note">
+              AIR 403 is a good rank. I know that. And part of me is genuinely satisfied —
+              especially given how hard my shift was. But another part of me keeps going back to
+              2–3 specific questions where I panicked and picked the wrong option. Questions I knew.
+              That's the part that stays with you. Not the rank — the feeling that you left something on the table.
+            </div>
+          </div>
+        </div>
+
+        <!-- TAKEAWAYS -->
+        <div class="section">
+          <div class="section-label">what I'd do differently</div>
+
+          <ul class="point-list">
+            <li>
+              <span class="icon" style="color:var(--green)">→</span>
+              <span><strong>Start in June.</strong> Seven months is the right duration. Five months is survivable but you'll feel it.</span>
+            </li>
+            <li>
+              <span class="icon" style="color:var(--green)">→</span>
+              <span><strong>Finish syllabus by November.</strong> This gives you a real two-month buffer for revision and mocks — not a compressed one.</span>
+            </li>
+            <li>
+              <span class="icon" style="color:var(--green)">→</span>
+              <span><strong>One full mock per day, not three.</strong> Spend the same total time but divide it: one test, then thorough analysis. That's the loop that actually improves your score.</span>
+            </li>
+            <li>
+              <span class="icon" style="color:var(--green)">→</span>
+              <span><strong>Collect good approaches.</strong> When you see a clever solution during analysis, write it down. Those collected insights compound over weeks.</span>
+            </li>
+            <li>
+              <span class="icon" style="color:var(--green)">→</span>
+              <span><strong>Be calm in the exam.</strong> This sounds obvious until you're sitting there with a lengthy paper and a ticking clock. The students who score well aren't always the ones who know the most — they're the ones who execute calmly under pressure. Breathe. You've put in the work. Trust it.</span>
+            </li>
+          </ul>
+
+          <div class="callout callout-green" style="margin-top: 20px;">
+            <div class="callout-label">the one thing</div>
+            <p>
+              If I had to pick a single lesson: calm and composed beats cramming and panic every time.
+              GATE rewards consistency and clear thinking — not last-minute heroics. 
+              The preparation is the easy part. Learning to stay in control when it counts is the real challenge.
+            </p>
+          </div>
+        </div>
+
+        <div class="post-footer-divider"></div>
+        <p class="post-footer-note">
+          Written in June 2025. If you're currently preparing for GATE and want to talk strategy,
+          feel free to reach out — the contact page has all the links.
+        </p>
+
+      </article>
+    </div>
+  </div>
+
+  <!-- Two levels deep: pages/blog_posts/ → ../../components/sidebar.js -->
+  <script src="../../components/sidebar_projects.js"></script>
+</body>
+</html>

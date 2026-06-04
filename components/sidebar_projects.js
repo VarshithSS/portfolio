@@ -1,23 +1,30 @@
 // sidebar.js — shared navigation panel
-// Usage: <script src="../../components/sidebar.js"></script> (adjust depth as needed)
-// Place a <div id="sidebar-root"></div> where you want the panel injected,
-// OR it will auto-inject before the first .layout element found.
 
 (function () {
 
-  // Find this script's own <script> tag and derive a relative path
-  // from the CURRENT PAGE back to the site root.
-  // Strategy: count how many directories deep the current page is,
-  // then produce the right number of "../" hops.
   function getRootPrefix() {
-    // window.location.pathname, e.g.:
-    //   /index.html                          → depth 0 → ""       (root is ".")
-    //   /pages/about.html                    → depth 1 → "../"
-    //   /pages/projects_repo/browser-agent.html → depth 2 → "../../"
-    const parts = window.location.pathname.split('/').filter(Boolean);
-    // parts.length includes the filename, so dirs = parts.length - 1
-    const dirs = parts.length > 0 ? parts.length - 1 : 0;
-    return dirs === 0 ? '.' : '../'.repeat(dirs).replace(/\/$/, '');
+    // Works for both file:// and http:// protocols.
+    // Get the full href of the current page, strip the filename,
+    // then navigate up to the root by counting directory segments
+    // relative to where components/sidebar.js sits.
+
+    // Find this script's own src attribute to locate the root
+    let scriptSrc = '';
+    const scripts = document.getElementsByTagName('script');
+    for (let i = 0; i < scripts.length; i++) {
+      if (scripts[i].src && scripts[i].src.indexOf('sidebar.js') !== -1) {
+        scriptSrc = scripts[i].src;
+        break;
+      }
+    }
+
+    if (!scriptSrc) return '.';
+
+    // scriptSrc is like: file:///C:/path/to/portfolio/components/sidebar.js
+    // We want:           file:///C:/path/to/portfolio
+    // Strip "/components/sidebar_projects.js" from the end
+    const root = scriptSrc.replace(/\/components\/sidebar_projects\.js.*$/, '');
+    return root;
   }
 
   function buildSidebarHTML(root) {

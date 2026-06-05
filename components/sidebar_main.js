@@ -1,9 +1,38 @@
-// sidebar.js — shared navigation panel
+// sidebar.js — shared navigation panel + theme toggle
 // Usage: <script src="/components/sidebar.js"></script> (adjust path as needed)
-// Place a <div id="sidebar-root"></div> where you want the panel injected,
-// OR it will auto-inject before the first .layout element found.
 
 (function () {
+  /* ── Theme management ── */
+  const THEME_KEY = 'portfolio-theme';
+
+  function getTheme() {
+    return localStorage.getItem(THEME_KEY) ||
+      (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+  }
+
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem(THEME_KEY, theme);
+    // Update toggle label/icon if it exists
+    const label = document.querySelector('.theme-toggle-label');
+    const badge = document.querySelector('.theme-toggle-badge');
+    const icon  = document.querySelector('.theme-toggle-icon');
+    if (label) label.textContent = theme === 'dark' ? 'Light mode' : 'Dark mode';
+    if (badge) badge.textContent = theme === 'dark' ? 'off' : 'on';
+    if (icon)  icon.innerHTML = theme === 'dark' ? SUN_ICON : MOON_ICON;
+  }
+
+  // Apply immediately to avoid flash
+  applyTheme(getTheme());
+
+  const SUN_ICON = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+    <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+  </svg>`;
+
+  const MOON_ICON = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+    <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/>
+  </svg>`;
+
   const SIDEBAR_HTML = `
 <aside class="side-panel" aria-label="Navigation">
   <div class="panel-inner">
@@ -55,6 +84,12 @@
 
     <div class="panel-divider" aria-hidden="true"></div>
 
+    <button class="theme-toggle" id="theme-toggle-btn" aria-label="Toggle theme">
+      <span class="theme-toggle-icon" aria-hidden="true"></span>
+      <span class="theme-toggle-label">Light mode</span>
+      <span class="theme-toggle-badge">off</span>
+    </button>
+
     <div class="panel-status">
       <span class="status-dot" aria-hidden="true"></span>
       <span>system online</span>
@@ -64,25 +99,32 @@
 </aside>`;
 
   function inject() {
-    // Option 1: explicit mount point
     const root = document.getElementById('sidebar-root');
     if (root) {
       root.outerHTML = SIDEBAR_HTML;
     } else {
-      // Option 2: prepend inside .layout
       const layout = document.querySelector('.layout');
       if (layout) {
         layout.insertAdjacentHTML('afterbegin', SIDEBAR_HTML);
       }
     }
     markActive();
+    initToggle();
   }
 
-  // Automatically mark the current page link as active
+  function initToggle() {
+    const btn = document.getElementById('theme-toggle-btn');
+    if (!btn) return;
+    // Sync button state with current theme
+    applyTheme(getTheme());
+    btn.addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme') || 'dark';
+      applyTheme(current === 'dark' ? 'light' : 'dark');
+    });
+  }
+
   function markActive() {
     const path = window.location.pathname;
-
-    // Derive a page key from the path
     let current = 'home';
     if (path.includes('about'))    current = 'about';
     else if (path.includes('projects')) current = 'projects';
@@ -95,7 +137,6 @@
     });
   }
 
-  // Run after DOM is ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', inject);
   } else {

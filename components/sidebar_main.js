@@ -1,4 +1,4 @@
-// sidebar.js — shared navigation panel + theme toggle
+// sidebar_main.js — shared navigation panel + theme toggle
 // Usage: <script src="/components/sidebar.js"></script> (adjust path as needed)
 
 (function () {
@@ -73,6 +73,12 @@
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
         </span>
         Blog
+      </a>
+      <a class="panel-link" href="./pages/resume.html" data-page="resume">
+        <span class="panel-link-icon" aria-hidden="true">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
+        </span>
+        Resume
       </a>
       <a class="panel-link" href="./pages/contact.html" data-page="contact">
         <span class="panel-link-icon" aria-hidden="true">

@@ -29,6 +29,58 @@
       --radius-sm: 6px;
       --radius-md: 10px;
     }
+    /* ── Light mode overrides ── */
+[data-theme="light"] {
+  --bg:      #f4f6f9;
+  --surface: #ffffff;
+  --border:  rgba(0,0,0,0.08);
+  --muted:   #6b7280;
+  --slate:   #9ca3af;
+  --soft:    #1a202c;
+  --cyan:    #0891b2;
+  --purple:  #7c3aed;
+  --green:   #059669;
+  --amber:   #d97706;
+  --red:     #dc2626;
+}
+
+[data-theme="light"] body {
+  background: var(--bg);
+  color: var(--soft);
+}
+
+[data-theme="light"] .grid-bg {
+  background-image:
+    linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+[data-theme="light"] .orb { opacity: 0.06; }
+
+[data-theme="light"] .topbar {
+  background: rgba(244,246,249,0.85);
+}
+
+[data-theme="light"] .featured-post,
+[data-theme="light"] .blog-card {
+  background: rgba(255,255,255,0.85);
+}
+
+[data-theme="light"] .featured-banner {
+  background: linear-gradient(135deg,
+    rgba(8,145,178,0.06) 0%,
+    rgba(124,58,237,0.08) 50%,
+    rgba(5,150,105,0.05) 100%);
+}
+
+[data-theme="light"] .featured-banner-code       { color: rgba(8,145,178,0.3); }
+[data-theme="light"] .featured-banner-code .kw   { color: rgba(124,58,237,0.4); }
+[data-theme="light"] .featured-banner-code .fn   { color: rgba(8,145,178,0.4); }
+[data-theme="light"] .featured-banner-code .str  { color: rgba(5,150,105,0.4); }
+[data-theme="light"] .featured-banner-code .cm   { color: rgba(0,0,0,0.15); }
+
+[data-theme="light"] .card-number { color: rgba(0,0,0,0.04); }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 

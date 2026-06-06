@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <title>Resume — Sri Varshith</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #080c12;
+      --surface: #0d1117;
+      --border:  rgba(255,255,255,0.07);
+      --muted:   #8b929e;
+      --slate:   #4a5568;
+      --soft:    #cdd3de;
+      --cyan:    #22D3EE;
+      --purple:  #8B5CF6;
+      --green:   #10B981;
+      --amber:   #F59E0B;
+      --font-mono:    'JetBrains Mono', monospace;
+      --font-display: 'Syne', sans-serif;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --transition: 0.2s ease;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--soft);
+      font-family: var(--font-mono);
+      font-size: 13px;
+      line-height: 1.6;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .grid-bg {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .orb {
+      position: fixed; border-radius: 50%; pointer-events: none; z-index: 0;
+      filter: blur(80px); opacity: 0.12;
+    }
+    .orb1 { width: 500px; height: 500px; background: radial-gradient(circle, #22D3EE 0%, transparent 70%); top: -120px; right: -80px; }
+    .orb2 { width: 400px; height: 400px; background: radial-gradient(circle, #8B5CF6 0%, transparent 70%); bottom: -80px; left: -80px; }
+
+    /* ── Layout (matches other pages) ── */
+    .layout {
+      position: relative; z-index: 1;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      min-height: 100vh;
+    }
+
+    /* Sidebar styles (consumed by sidebar_pages.js output) */
+    .side-panel {
+      position: sticky; top: 0; height: 100vh;
+      border-right: 0.5px solid var(--border);
+      overflow-y: auto;
+      background: rgba(9,13,22,0.97);
+      backdrop-filter: blur(20px);
+      display: flex; flex-direction: column;
+    }
+    .panel-inner {
+      padding: 28px 18px; flex: 1;
+      display: flex; flex-direction: column;
+      position: relative; overflow: hidden;
+    }
+    .panel-inner::before {
+      content: ''; position: absolute;
+      top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(139,92,246,0.4), transparent);
+    }
+    .panel-brand {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 32px; padding-bottom: 20px;
+      border-bottom: 0.5px solid rgba(255,255,255,0.06);
+    }
+    .panel-brand-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--cyan);
+      animation: pulse-green 2s ease-in-out infinite; flex-shrink: 0;
+    }
+    .panel-brand-name {
+      font-family: var(--font-display); font-size: 13px;
+      font-weight: 700; color: var(--soft); letter-spacing: 0.3px;
+    }
+    .panel-label {
+      font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+      color: var(--slate); margin-bottom: 8px; padding-left: 2px;
+    }
+    .panel-nav { display: flex; flex-direction: column; gap: 2px; margin-bottom: 24px; }
+    .panel-link {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 12px; border-radius: var(--radius-sm);
+      font-size: 13px; color: var(--muted);
+      border: 0.5px solid transparent; text-decoration: none;
+      transition: all var(--transition);
+    }
+    .panel-link:hover { color: var(--cyan); background: rgba(34,211,238,0.06); border-color: rgba(34,211,238,0.15); }
+    .panel-link.active { color: var(--cyan); background: rgba(34,211,238,0.07); border-color: rgba(34,211,238,0.2); }
+    .panel-link-icon { display: flex; align-items: center; justify-content: center; width: 16px; flex-shrink: 0; color: inherit; opacity: 0.7; }
+    .panel-link:hover .panel-link-icon, .panel-link.active .panel-link-icon { opacity: 1; }
+    .panel-divider { height: 0.5px; background: rgba(255,255,255,0.06); margin: 16px 0; }
+    .panel-status {
+      margin-top: auto; display: flex; align-items: center; gap: 7px;
+      font-size: 9px; color: var(--slate);
+      padding: 16px 2px 0; border-top: 0.5px solid rgba(255,255,255,0.06);
+    }
+    .status-dot {
+      width: 5px; height: 5px; border-radius: 50%; background: var(--green);
+      animation: pulse-green 2s ease-in-out infinite; flex-shrink: 0;
+    }
+    .theme-toggle {
+      display: flex; align-items: center; gap: 10px;
+      width: 100%; padding: 9px 12px;
+      background: rgba(255,255,255,0.03);
+      border: 0.5px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius-sm);
+      cursor: pointer; color: var(--muted);
+      font-family: var(--font-mono); font-size: 12px;
+      transition: all var(--transition); margin-bottom: 16px;
+    }
+    .theme-toggle:hover { background: rgba(34,211,238,0.06); border-color: rgba(34,211,238,0.2); color: var(--cyan); }
+    .theme-toggle-icon { display: flex; align-items: center; width: 16px; flex-shrink: 0; opacity: 0.8; }
+    .theme-toggle-label { flex: 1; text-align: left; }
+    .theme-toggle-badge {
+      font-size: 9px; letter-spacing: 1px; text-transform: uppercase;
+      padding: 2px 6px; border-radius: 2px;
+      background: rgba(255,255,255,0.05); border: 0.5px solid rgba(255,255,255,0.08);
+    }
+
+    /* ── Main column ── */
+    .main-col { display: flex; flex-direction: column; min-height: 100vh; overflow: hidden; }
+
+    /* ── Topbar ── */
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 24px; height: 44px;
+      border-bottom: 0.5px solid var(--border);
+      background: rgba(8,12,18,0.7);
+      backdrop-filter: blur(8px);
+      position: sticky; top: 0; z-index: 10; flex-shrink: 0;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 10px; }
+    .dots { display: flex; gap: 5px; }
+    .dot { width: 9px; height: 9px; border-radius: 50%; }
+    .dot-r { background: #FF5F57; } .dot-y { background: #FFBD2E; } .dot-g { background: #28CA42; }
+    .topbar-path { font-size: 11px; color: var(--slate); }
+    .topbar-path a { color: var(--slate); text-decoration: none; }
+    .online-status { display: flex; align-items: center; gap: 5px; font-size: 10px; color: var(--slate); }
+    .online-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--green); animation: pulse-green 2s ease-in-out infinite; }
+
+    /* ── Page content ── */
+    .page-content { padding: 28px 28px 60px; flex: 1; display: flex; flex-direction: column; }
+
+    /* ── Page header ── */
+    .page-header {
+      margin-bottom: 24px;
+      opacity: 0; animation: slide-up 0.5s 0.15s ease forwards;
+    }
+    .page-header-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 6px; }
+    .page-title {
+      font-family: var(--font-display);
+      font-size: clamp(22px, 3vw, 32px);
+      font-weight: 800; letter-spacing: -1px;
+      background: linear-gradient(90deg, #22D3EE 0%, #8B5CF6 60%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .page-sub { font-size: 12px; color: var(--muted); }
+
+    /* ── Action bar ── */
+    .action-bar {
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+      margin-bottom: 20px;
+      opacity: 0; animation: slide-up 0.5s 0.25s ease forwards;
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 8px 16px; border-radius: var(--radius-sm);
+      font-family: var(--font-mono); font-size: 11px;
+      cursor: pointer; text-decoration: none;
+      border: 0.5px solid; transition: all var(--transition);
+      letter-spacing: 0.3px;
+    }
+    .btn-primary {
+      background: rgba(34,211,238,0.1); border-color: rgba(34,211,238,0.35);
+      color: var(--cyan);
+    }
+    .btn-primary:hover { background: rgba(34,211,238,0.18); border-color: var(--cyan); }
+    .btn-ghost {
+      background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.1);
+      color: var(--muted);
+    }
+    .btn-ghost:hover { background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.2); color: var(--soft); }
+
+    /* ── PDF viewer frame ── */
+    .pdf-wrapper {
+      flex: 1; display: flex; flex-direction: column;
+      border: 0.5px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      position: relative;
+      opacity: 0; animation: slide-up 0.55s 0.35s ease forwards;
+      min-height: 75vh;
+    }
+    .pdf-wrapper::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 1.5px;
+      background: linear-gradient(90deg, transparent, var(--cyan), var(--purple), transparent);
+      z-index: 1;
+    }
+    .pdf-frame {
+      width: 100%; flex: 1; border: none;
+      background: var(--surface);
+      min-height: 75vh;
+    }
+
+    /* ── Fallback (shown if iframe blocked) ── */
+    .pdf-fallback {
+      display: none;
+      flex-direction: column; align-items: center; justify-content: center;
+      gap: 14px; padding: 48px 24px; text-align: center;
+      background: rgba(17,24,39,0.6);
+    }
+    .pdf-fallback-icon { font-size: 36px; opacity: 0.4; }
+    .pdf-fallback p { font-size: 12px; color: var(--muted); max-width: 340px; line-height: 1.8; }
+
+    /* ── Light mode ── */
+    [data-theme="light"] {
+      --bg: #f4f6f9; --surface: #ffffff; --border: rgba(0,0,0,0.08);
+      --muted: #6b7280; --slate: #9ca3af; --soft: #1a202c;
+      --cyan: #0891b2; --purple: #7c3aed; --green: #059669; --amber: #d97706;
+    }
+    [data-theme="light"] body { background: var(--bg); color: var(--soft); }
+    [data-theme="light"] .grid-bg {
+      background-image:
+        linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
+    }
+    [data-theme="light"] .orb { opacity: 0.05; }
+    [data-theme="light"] .side-panel { background: rgba(244,246,249,0.97); }
+    [data-theme="light"] .topbar { background: rgba(244,246,249,0.85); }
+    [data-theme="light"] .pdf-wrapper { border-color: rgba(0,0,0,0.1); }
+    [data-theme="light"] .theme-toggle { background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.08); }
+
+    @keyframes slide-up {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse-green {
+      0%,100% { box-shadow: 0 0 0 0 rgba(16,185,129,0.5); }
+      50%      { box-shadow: 0 0 0 5px rgba(16,185,129,0); }
+    }
+
+    @media (max-width: 768px) {
+      .layout { grid-template-columns: 1fr; }
+      .page-content { padding: 20px 16px 48px; }
+      .pdf-frame, .pdf-wrapper { min-height: 60vh; }
+    }
+  </style>
+</head>
+<body>
+  <div class="grid-bg" aria-hidden="true"></div>
+  <div class="orb orb1" aria-hidden="true"></div>
+  <div class="orb orb2" aria-hidden="true"></div>
+
+  <div class="layout">
+    <div id="sidebar-root"></div>
+
+    <div class="main-col">
+
+      <header class="topbar">
+        <div class="topbar-left">
+          <div class="dots" aria-hidden="true">
+            <div class="dot dot-r"></div>
+            <div class="dot dot-y"></div>
+            <div class="dot dot-g"></div>
+          </div>
+          <span class="topbar-path">
+            <a href="../">~/portfolio</a> / resume
+          </span>
+        </div>
+        <div class="topbar-right">
+          <span class="online-status">
+            <span class="online-dot" aria-hidden="true"></span>online
+          </span>
+        </div>
+      </header>
+
+      <div class="page-content">
+
+        <div class="page-header">
+          <div class="page-header-top">
+            <h1 class="page-title">Resume</h1>
+          </div>
+          <p class="page-sub">Last updated June 2025 · PDF viewer below</p>
+        </div>
+
+        <div class="action-bar">
+          <a class="btn btn-primary" href="../assets/resume.pdf" download="Sri_Varshith_Resume.pdf">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Download PDF
+          </a>
+          <a class="btn btn-ghost" href="../assets/resume.pdf" target="_blank" rel="noopener">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
+              <polyline points="15 3 21 3 21 9"/>
+              <line x1="10" y1="14" x2="21" y2="3"/>
+            </svg>
+            Open in new tab
+          </a>
+        </div>
+
+        <div class="pdf-wrapper" id="pdf-wrapper">
+          <iframe
+            class="pdf-frame"
+            id="pdf-frame"
+            src="../assets/resume.pdf"
+            title="Sri Varshith Resume"
+            aria-label="Resume PDF viewer"
+          ></iframe>
+
+          <!-- Shown via JS if iframe fails to load -->
+          <div class="pdf-fallback" id="pdf-fallback">
+            <div class="pdf-fallback-icon">📄</div>
+            <p>Your browser couldn't embed the PDF. Use the buttons above to download or open it directly.</p>
+            <a class="btn btn-primary" href="../assets/resume.pdf" download="Sri_Varshith_Resume.pdf">Download Resume</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="../components/sidebar_pages.js"></script>
+  <script>
+    // Detect iframe load failure (e.g. browser blocks PDF embedding)
+    const frame = document.getElementById('pdf-frame');
+    const fallback = document.getElementById('pdf-fallback');
+    frame.addEventListener('error', () => {
+      frame.style.display = 'none';
+      fallback.style.display = 'flex';
+    });
+  </script>
+</body>
+</html>

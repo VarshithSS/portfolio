@@ -55,7 +55,7 @@
     .orb1 { width: 500px; height: 500px; background: radial-gradient(circle, #22D3EE 0%, transparent 70%); top: -120px; right: -80px; }
     .orb2 { width: 400px; height: 400px; background: radial-gradient(circle, #8B5CF6 0%, transparent 70%); bottom: -80px; left: -80px; }
 
-    /* ── Layout (matches other pages) ── */
+    /* ── Layout ── */
     .layout {
       position: relative; z-index: 1;
       display: grid;
@@ -63,7 +63,7 @@
       min-height: 100vh;
     }
 
-    /* Sidebar styles (consumed by sidebar_pages.js output) */
+    /* Sidebar */
     .side-panel {
       position: sticky; top: 0; height: 100vh;
       border-right: 0.5px solid var(--border);
@@ -204,38 +204,117 @@
       color: var(--muted);
     }
     .btn-ghost:hover { background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.2); color: var(--soft); }
+    .btn:disabled { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
 
-    /* ── PDF viewer frame ── */
+    /* ── PDF Viewer ── */
     .pdf-wrapper {
-      flex: 1; display: flex; flex-direction: column;
+      flex: 1;
       border: 0.5px solid var(--border);
       border-radius: var(--radius-md);
       overflow: hidden;
       position: relative;
       opacity: 0; animation: slide-up 0.55s 0.35s ease forwards;
-      min-height: 75vh;
+      display: flex;
+      flex-direction: column;
     }
     .pdf-wrapper::before {
       content: '';
       position: absolute; top: 0; left: 0; right: 0; height: 1.5px;
       background: linear-gradient(90deg, transparent, var(--cyan), var(--purple), transparent);
-      z-index: 1;
-    }
-    .pdf-frame {
-      width: 100%; flex: 1; border: none;
-      background: var(--surface);
-      min-height: 75vh;
+      z-index: 2; pointer-events: none;
     }
 
-    /* ── Fallback (shown if iframe blocked) ── */
-    .pdf-fallback {
-      display: none;
-      flex-direction: column; align-items: center; justify-content: center;
-      gap: 14px; padding: 48px 24px; text-align: center;
-      background: rgba(17,24,39,0.6);
+    /* Toolbar inside viewer */
+    .pdf-toolbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 8px 14px;
+      background: rgba(13,17,23,0.95);
+      border-bottom: 0.5px solid var(--border);
+      gap: 12px; flex-shrink: 0; flex-wrap: wrap;
+      position: sticky; top: 0; z-index: 1;
     }
-    .pdf-fallback-icon { font-size: 36px; opacity: 0.4; }
-    .pdf-fallback p { font-size: 12px; color: var(--muted); max-width: 340px; line-height: 1.8; }
+    .pdf-toolbar-left { display: flex; align-items: center; gap: 6px; }
+    .pdf-toolbar-center { display: flex; align-items: center; gap: 8px; }
+    .pdf-toolbar-right { display: flex; align-items: center; gap: 6px; }
+
+    .pdf-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 28px; height: 28px;
+      background: rgba(255,255,255,0.04);
+      border: 0.5px solid rgba(255,255,255,0.09);
+      border-radius: 4px;
+      color: var(--muted); cursor: pointer;
+      transition: all var(--transition);
+      font-size: 11px; font-family: var(--font-mono);
+    }
+    .pdf-btn:hover:not(:disabled) {
+      background: rgba(34,211,238,0.08);
+      border-color: rgba(34,211,238,0.3);
+      color: var(--cyan);
+    }
+    .pdf-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+    .pdf-page-indicator {
+      font-size: 11px; color: var(--muted);
+      display: flex; align-items: center; gap: 4px;
+    }
+    .pdf-page-num { color: var(--cyan); font-weight: 500; min-width: 16px; text-align: center; }
+    .pdf-zoom-label {
+      font-size: 10px; color: var(--slate);
+      min-width: 38px; text-align: center;
+    }
+
+    /* Canvas area */
+    .pdf-canvas-area {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: auto;
+      background: #111418;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px;
+      gap: 16px;
+    }
+
+    .pdf-page-wrap {
+      position: relative;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.5);
+      border-radius: 4px;
+      overflow: hidden;
+      line-height: 0;
+    }
+    .pdf-page-wrap canvas { display: block; }
+
+    /* Loading state */
+    .pdf-loading {
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 14px; padding: 64px 24px;
+      flex: 1;
+    }
+    .pdf-loading-bar {
+      width: 180px; height: 2px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 2px; overflow: hidden;
+    }
+    .pdf-loading-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--cyan), var(--purple));
+      animation: loading-bar 1.4s ease-in-out infinite;
+      border-radius: 2px;
+    }
+    .pdf-loading-text { font-size: 11px; color: var(--slate); letter-spacing: 1px; }
+
+    /* Error state */
+    .pdf-error {
+      display: none; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 14px; padding: 64px 24px; text-align: center;
+      flex: 1;
+    }
+    .pdf-error-icon { font-size: 32px; opacity: 0.3; }
+    .pdf-error p { font-size: 12px; color: var(--muted); max-width: 320px; line-height: 1.8; }
 
     /* ── Light mode ── */
     [data-theme="light"] {
@@ -252,8 +331,8 @@
     [data-theme="light"] .orb { opacity: 0.05; }
     [data-theme="light"] .side-panel { background: rgba(244,246,249,0.97); }
     [data-theme="light"] .topbar { background: rgba(244,246,249,0.85); }
-    [data-theme="light"] .pdf-wrapper { border-color: rgba(0,0,0,0.1); }
-    [data-theme="light"] .theme-toggle { background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.08); }
+    [data-theme="light"] .pdf-canvas-area { background: #e8eaed; }
+    [data-theme="light"] .pdf-toolbar { background: rgba(244,246,249,0.98); }
 
     @keyframes slide-up {
       from { opacity: 0; transform: translateY(16px); }
@@ -263,11 +342,16 @@
       0%,100% { box-shadow: 0 0 0 0 rgba(16,185,129,0.5); }
       50%      { box-shadow: 0 0 0 5px rgba(16,185,129,0); }
     }
+    @keyframes loading-bar {
+      0%   { transform: translateX(-100%); }
+      50%  { transform: translateX(0); }
+      100% { transform: translateX(100%); }
+    }
 
     @media (max-width: 768px) {
       .layout { grid-template-columns: 1fr; }
       .page-content { padding: 20px 16px 48px; }
-      .pdf-frame, .pdf-wrapper { min-height: 60vh; }
+      .pdf-canvas-area { padding: 12px 8px; }
     }
   </style>
 </head>
@@ -305,7 +389,7 @@
           <div class="page-header-top">
             <h1 class="page-title">Resume</h1>
           </div>
-          <p class="page-sub">Last updated June 2025 · PDF viewer below</p>
+          <p class="page-sub">Last updated June 2025 · Rendered inline via PDF.js</p>
         </div>
 
         <div class="action-bar">
@@ -328,35 +412,301 @@
         </div>
 
         <div class="pdf-wrapper" id="pdf-wrapper">
-          <iframe
-            class="pdf-frame"
-            id="pdf-frame"
-            src="../assets/resume.pdf"
-            title="Sri Varshith Resume"
-            aria-label="Resume PDF viewer"
-          ></iframe>
 
-          <!-- Shown via JS if iframe fails to load -->
-          <div class="pdf-fallback" id="pdf-fallback">
-            <div class="pdf-fallback-icon">📄</div>
-            <p>Your browser couldn't embed the PDF. Use the buttons above to download or open it directly.</p>
+          <!-- Toolbar -->
+          <div class="pdf-toolbar" id="pdf-toolbar" style="display:none;">
+            <div class="pdf-toolbar-left">
+              <!-- Zoom out -->
+              <button class="pdf-btn" id="btn-zoom-out" title="Zoom out">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                  <line x1="8" y1="11" x2="14" y2="11"/>
+                </svg>
+              </button>
+              <span class="pdf-zoom-label" id="zoom-label">100%</span>
+              <!-- Zoom in -->
+              <button class="pdf-btn" id="btn-zoom-in" title="Zoom in">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                  <line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/>
+                </svg>
+              </button>
+              <!-- Fit width -->
+              <button class="pdf-btn" id="btn-fit" title="Fit to width" style="width:auto;padding:0 8px;font-size:10px;letter-spacing:.5px;">
+                Fit
+              </button>
+            </div>
+
+            <div class="pdf-toolbar-center">
+              <!-- Prev page -->
+              <button class="pdf-btn" id="btn-prev" title="Previous page" disabled>
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="15 18 9 12 15 6"/>
+                </svg>
+              </button>
+              <span class="pdf-page-indicator">
+                <span class="pdf-page-num" id="page-num">1</span>
+                <span style="color:var(--slate)">/</span>
+                <span class="pdf-page-num" id="page-total" style="color:var(--muted)">—</span>
+              </span>
+              <!-- Next page -->
+              <button class="pdf-btn" id="btn-next" title="Next page" disabled>
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="9 18 15 12 9 6"/>
+                </svg>
+              </button>
+            </div>
+
+            <div class="pdf-toolbar-right">
+              <!-- Render all pages toggle -->
+              <button class="pdf-btn" id="btn-all-pages" title="Toggle: render all pages / single page"
+                style="width:auto;padding:0 8px;font-size:10px;letter-spacing:.5px;">All pages</button>
+            </div>
+          </div>
+
+          <!-- Loading -->
+          <div class="pdf-loading" id="pdf-loading">
+            <div class="pdf-loading-bar"><div class="pdf-loading-bar-fill"></div></div>
+            <span class="pdf-loading-text">rendering pdf...</span>
+          </div>
+
+          <!-- Canvas area -->
+          <div class="pdf-canvas-area" id="pdf-canvas-area" style="display:none;"></div>
+
+          <!-- Local file fallback (shown when running over file://) -->
+          <div class="pdf-error" id="pdf-local-fallback" style="display:none;">
+            <div class="pdf-error-icon">🗂️</div>
+            <p style="margin-bottom:4px;">Running locally? PDF.js can't fetch files over <code style="color:var(--cyan);font-size:11px;">file://</code> due to browser security.<br>Pick your <code style="color:var(--amber);font-size:11px;">resume.pdf</code> below to render it, or deploy the site to see it load automatically.</p>
+            <label class="btn btn-primary" style="cursor:pointer;margin-top:6px;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              Load resume.pdf
+              <input type="file" accept="application/pdf" id="local-pdf-input" style="display:none;" />
+            </label>
+          </div>
+
+          <!-- Error -->
+          <div class="pdf-error" id="pdf-error" style="display:none;">
+            <div class="pdf-error-icon">📄</div>
+            <p>Couldn't render the PDF. Use the buttons above to download or open it directly.</p>
             <a class="btn btn-primary" href="../assets/resume.pdf" download="Sri_Varshith_Resume.pdf">Download Resume</a>
           </div>
-        </div>
 
+        </div>
       </div>
     </div>
   </div>
 
   <script src="../components/sidebar_pages.js"></script>
   <script>
-    // Detect iframe load failure (e.g. browser blocks PDF embedding)
-    const frame = document.getElementById('pdf-frame');
-    const fallback = document.getElementById('pdf-fallback');
-    frame.addEventListener('error', () => {
-      frame.style.display = 'none';
-      fallback.style.display = 'flex';
+    // ── PDF.js setup ──────────────────────────────────────────────
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+    const PDF_URL = '../assets/resume.pdf';
+    const ZOOM_STEP    = 0.2;
+    const ZOOM_MIN     = 0.4;
+    const ZOOM_MAX     = 3.0;
+
+    let pdfDoc         = null;
+    let currentPage    = 1;
+    let scale          = 1.0;
+    let fitScale       = 1.0;
+    let renderAllPages = false;
+    let renderTask     = null;
+
+    const loading      = document.getElementById('pdf-loading');
+    const canvasArea   = document.getElementById('pdf-canvas-area');
+    const toolbar      = document.getElementById('pdf-toolbar');
+    const errDiv       = document.getElementById('pdf-error');
+    const localFallback = document.getElementById('pdf-local-fallback');
+    const localInput   = document.getElementById('local-pdf-input');
+    const pageNum      = document.getElementById('page-num');
+    const pageTotal  = document.getElementById('page-total');
+    const zoomLabel  = document.getElementById('zoom-label');
+    const btnPrev    = document.getElementById('btn-prev');
+    const btnNext    = document.getElementById('btn-next');
+    const btnZoomIn  = document.getElementById('btn-zoom-in');
+    const btnZoomOut = document.getElementById('btn-zoom-out');
+    const btnFit     = document.getElementById('btn-fit');
+    const btnAll     = document.getElementById('btn-all-pages');
+
+    // ── Helpers ───────────────────────────────────────────────────
+    function calcFitScale(page) {
+      const vp = page.getViewport({ scale: 1 });
+      const containerW = canvasArea.clientWidth - 32; // 16px padding each side
+      return Math.min(1.5, containerW / vp.width);
+    }
+
+    function updateUI() {
+      if (!pdfDoc) return;
+      pageNum.textContent  = currentPage;
+      pageTotal.textContent = pdfDoc.numPages;
+      zoomLabel.textContent = Math.round(scale * 100) + '%';
+      btnPrev.disabled = currentPage <= 1 || renderAllPages;
+      btnNext.disabled = currentPage >= pdfDoc.numPages || renderAllPages;
+      btnZoomOut.disabled = scale <= ZOOM_MIN;
+      btnZoomIn.disabled  = scale >= ZOOM_MAX;
+    }
+
+    // ── Render single page into a canvas ──────────────────────────
+    async function renderPage(pageNum, canvas, s) {
+      const page = await pdfDoc.getPage(pageNum);
+      const vp   = page.getViewport({ scale: s });
+      const ctx  = canvas.getContext('2d');
+      const dpr  = window.devicePixelRatio || 1;
+
+      canvas.width  = Math.floor(vp.width  * dpr);
+      canvas.height = Math.floor(vp.height * dpr);
+      canvas.style.width  = Math.floor(vp.width)  + 'px';
+      canvas.style.height = Math.floor(vp.height) + 'px';
+
+      ctx.scale(dpr, dpr);
+
+      if (renderTask) { try { renderTask.cancel(); } catch(_){} }
+      renderTask = page.render({ canvasContext: ctx, viewport: vp });
+      await renderTask.promise;
+      renderTask = null;
+      return page;
+    }
+
+    // ── Build / refresh the canvas area ──────────────────────────
+    async function buildView() {
+      canvasArea.innerHTML = '';
+
+      if (renderAllPages) {
+        // Render every page stacked
+        for (let i = 1; i <= pdfDoc.numPages; i++) {
+          const wrap   = document.createElement('div');
+          wrap.className = 'pdf-page-wrap';
+          const canvas = document.createElement('canvas');
+          wrap.appendChild(canvas);
+          canvasArea.appendChild(wrap);
+          await renderPage(i, canvas, scale);
+        }
+      } else {
+        // Render only current page
+        const wrap   = document.createElement('div');
+        wrap.className = 'pdf-page-wrap';
+        const canvas = document.createElement('canvas');
+        wrap.appendChild(canvas);
+        canvasArea.appendChild(wrap);
+        await renderPage(currentPage, canvas, scale);
+      }
+
+      updateUI();
+    }
+
+    // ── Load PDF ──────────────────────────────────────────────────
+    async function loadFromSource(source) {
+      // source: string URL or ArrayBuffer
+      try {
+        loading.style.display       = 'flex';
+        localFallback.style.display = 'none';
+        errDiv.style.display        = 'none';
+
+        const loadingTask = pdfjsLib.getDocument(source);
+        pdfDoc = await loadingTask.promise;
+
+        const page1 = await pdfDoc.getPage(1);
+        fitScale = calcFitScale(page1);
+        scale    = fitScale;
+
+        loading.style.display    = 'none';
+        toolbar.style.display    = 'flex';
+        canvasArea.style.display = 'flex';
+
+        await buildView();
+      } catch (err) {
+        console.error('PDF load error:', err);
+        loading.style.display = 'none';
+        // If running over file:// or CORS blocked, show the local picker
+        const isLocal = location.protocol === 'file:' ||
+                        err?.message?.includes('NetworkError') ||
+                        err?.name === 'UnknownErrorException';
+        if (isLocal && typeof source === 'string') {
+          localFallback.style.display = 'flex';
+        } else {
+          errDiv.style.display = 'flex';
+        }
+      }
+    }
+
+    async function loadPDF() {
+      // Show loading immediately, then try fetching from URL
+      await loadFromSource(PDF_URL);
+    }
+
+    // ── Local file picker (file:// fallback) ──────────────────────
+    localInput.addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const arrayBuffer = await file.arrayBuffer();
+      currentPage    = 1;
+      renderAllPages = false;
+      btnAll.style.color       = '';
+      btnAll.style.borderColor = '';
+      await loadFromSource({ data: arrayBuffer });
     });
+
+    // ── Controls ──────────────────────────────────────────────────
+    btnPrev.addEventListener('click', async () => {
+      if (currentPage > 1) { currentPage--; await buildView(); }
+    });
+    btnNext.addEventListener('click', async () => {
+      if (currentPage < pdfDoc.numPages) { currentPage++; await buildView(); }
+    });
+    btnZoomIn.addEventListener('click', async () => {
+      scale = Math.min(ZOOM_MAX, +(scale + ZOOM_STEP).toFixed(1));
+      await buildView();
+    });
+    btnZoomOut.addEventListener('click', async () => {
+      scale = Math.max(ZOOM_MIN, +(scale - ZOOM_STEP).toFixed(1));
+      await buildView();
+    });
+    btnFit.addEventListener('click', async () => {
+      scale = fitScale;
+      await buildView();
+    });
+    btnAll.addEventListener('click', async () => {
+      renderAllPages = !renderAllPages;
+      btnAll.style.color       = renderAllPages ? 'var(--cyan)' : '';
+      btnAll.style.borderColor = renderAllPages ? 'rgba(34,211,238,0.35)' : '';
+      currentPage = 1;
+      await buildView();
+    });
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', async (e) => {
+      if (!pdfDoc || renderAllPages) return;
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+        if (currentPage < pdfDoc.numPages) { currentPage++; await buildView(); }
+      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+        if (currentPage > 1) { currentPage--; await buildView(); }
+      }
+    });
+
+    // Recalculate fit on resize
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(async () => {
+        if (!pdfDoc) return;
+        const page1 = await pdfDoc.getPage(1);
+        fitScale = calcFitScale(page1);
+        // Only auto-refit if we're close to the fit scale
+        if (Math.abs(scale - fitScale) < 0.15) {
+          scale = fitScale;
+          await buildView();
+        }
+      }, 250);
+    });
+
+    // Boot
+    loadPDF();
   </script>
 </body>
 </html>

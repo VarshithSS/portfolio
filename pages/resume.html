@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
@@ -68,7 +69,9 @@
       position: sticky; top: 0; height: 100vh;
       border-right: 0.5px solid var(--border);
       overflow-y: auto;
-      background: rgba(9,13,22,0.97);
+      opacity: 0;
+      animation: slide-up 0.5s 0.1s ease forwards;
+      background: rgba(9, 13, 22, 0.97);
       backdrop-filter: blur(20px);
       display: flex; flex-direction: column;
     }
@@ -97,15 +100,16 @@
       font-weight: 700; color: var(--soft); letter-spacing: 0.3px;
     }
     .panel-label {
-      font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
-      color: var(--slate); margin-bottom: 8px; padding-left: 2px;
+      font-size: 9px; letter-spacing: 2px;
+      text-transform: uppercase; color: var(--slate);
+      margin-bottom: 8px; padding-left: 2px;
     }
     .panel-nav { display: flex; flex-direction: column; gap: 2px; margin-bottom: 24px; }
     .panel-link {
       display: flex; align-items: center; gap: 10px;
       padding: 9px 12px; border-radius: var(--radius-sm);
       font-size: 13px; color: var(--muted);
-      border: 0.5px solid transparent; text-decoration: none;
+      border: 0.5px solid transparent;
       transition: all var(--transition);
     }
     .panel-link:hover { color: var(--cyan); background: rgba(34,211,238,0.06); border-color: rgba(34,211,238,0.15); }
@@ -118,7 +122,7 @@
       font-size: 9px; color: var(--slate);
       padding: 16px 2px 0; border-top: 0.5px solid rgba(255,255,255,0.06);
     }
-    .status-dot {
+   .status-dot {
       width: 5px; height: 5px; border-radius: 50%; background: var(--green);
       animation: pulse-green 2s ease-in-out infinite; flex-shrink: 0;
     }
@@ -506,7 +510,7 @@
     pdfjsLib.GlobalWorkerOptions.workerSrc =
       'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-    const PDF_URL = '../assets/resume.pdf';
+    const PDF_URL      = '../assets/resume.pdf';
     const ZOOM_STEP    = 0.2;
     const ZOOM_MIN     = 0.4;
     const ZOOM_MAX     = 3.0;
@@ -537,8 +541,12 @@
     // ── Helpers ───────────────────────────────────────────────────
     function calcFitScale(page) {
       const vp = page.getViewport({ scale: 1 });
-      const containerW = canvasArea.clientWidth - 32; // 16px padding each side
-      return Math.min(1.5, containerW / vp.width);
+      // canvasArea may be display:none so clientWidth is 0 — fall back up the DOM
+      const ref = canvasArea.clientWidth ||
+                  document.getElementById('pdf-wrapper').clientWidth ||
+                  document.querySelector('.page-content').clientWidth;
+      const containerW = Math.max(ref, 400) - 32;
+      return Math.max(0.5, Math.min(1.5, containerW / vp.width));
     }
 
     function updateUI() {
@@ -612,12 +620,15 @@
         pdfDoc = await loadingTask.promise;
 
         const page1 = await pdfDoc.getPage(1);
-        fitScale = calcFitScale(page1);
-        scale    = fitScale;
 
         loading.style.display    = 'none';
         toolbar.style.display    = 'flex';
         canvasArea.style.display = 'flex';
+
+        // Wait one frame so the browser performs layout and clientWidth is real
+        await new Promise(r => requestAnimationFrame(r));
+        fitScale = calcFitScale(page1);
+        scale    = fitScale;
 
         await buildView();
       } catch (err) {

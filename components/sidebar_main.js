@@ -137,7 +137,7 @@
     else if (path.includes('research')) current = 'research';
     else if (path.includes('blog'))     current = 'blog';
     else if (path.includes('contact'))  current = 'contact';
-
+    else if (path.includes('resume'))   current = 'resume';
     document.querySelectorAll('.panel-nav .panel-link').forEach(link => {
       link.classList.toggle('active', link.dataset.page === current);
     });

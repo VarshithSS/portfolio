@@ -15,7 +15,7 @@ const label = document.querySelector('.theme-toggle-label');
 const badge = document.querySelector('.theme-toggle-badge');
 const icon  = document.querySelector('.theme-toggle-icon');
 if (label) label.textContent = theme === 'dark' ? 'Light mode' : 'Dark mode';
-
+if (badge) badge.textContent = theme === 'dark' ? 'Light' : 'Dark';
 if (icon)  icon.innerHTML = theme === 'dark' ? SUN_ICON : MOON_ICON;
   }
 // Apply immediately to avoid flash
@@ -89,7 +89,7 @@ const SIDEBAR_HTML = `
     <button class="theme-toggle" id="theme-toggle-btn" aria-label="Toggle theme">
       <span class="theme-toggle-icon" aria-hidden="true"></span>
       <span class="theme-toggle-label">Light mode</span>
-      <span class="theme-toggle-badge">off</span>))   cu
+      <span class="theme-toggle-badge">off</span>
     </button>
     <div class="panel-status">
       <span class="status-dot" aria-hidden="true"></span>

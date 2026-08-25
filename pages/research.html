@@ -1,631 +1,114 @@
+<!-- pages/research.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Research — Singampalli Sri Varshith</title>
+  <meta name="description" content="Reliable and interpretable medical AI tool orchestration for cardiac MRI — IIT Kanpur." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../styles.css" />
-  <style>
-
-    /* ── Section label ── */
-    .rs-label {
-      font-size: 9px;
-      letter-spacing: 2.5px;
-      text-transform: uppercase;
-      color: var(--slate);
-      margin-bottom: 14px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .rs-label::after {
-      content: '';
-      flex: 1;
-      height: 0.5px;
-      background: var(--border);
-    }
-
-    /* ── Fade-in sections ── */
-    .rs-section {
-      margin-bottom: 28px;
-      opacity: 0;
-      animation: slide-up 0.55s ease forwards;
-    }
-    .rs-section:nth-child(1) { animation-delay: 0.25s; }
-    .rs-section:nth-child(2) { animation-delay: 0.38s; }
-    .rs-section:nth-child(3) { animation-delay: 0.50s; }
-    .rs-section:nth-child(4) { animation-delay: 0.62s; }
-    .rs-section:nth-child(5) { animation-delay: 0.74s; }
-    .rs-section:nth-child(6) { animation-delay: 0.86s; }
-    .rs-section:nth-child(7) { animation-delay: 0.96s; }
-
-    /* ── Paper Hero Card ── */
-    .paper-hero {
-      background: rgba(17,24,39,0.8);
-      border: 0.5px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 24px 26px;
-      position: relative;
-      overflow: hidden;
-    }
-    .paper-hero::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(34,211,238,0.6), transparent);
-    }
-    .paper-hero::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(ellipse at top right, rgba(139,92,246,0.06) 0%, transparent 65%);
-      pointer-events: none;
-    }
-    .paper-status-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 14px;
-      flex-wrap: wrap;
-    }
-    .paper-badge {
-      font-size: 9px;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      padding: 3px 9px;
-      border-radius: 3px;
-    }
-    .badge-wip {
-      background: rgba(245,158,11,0.1);
-      border: 0.5px solid rgba(245,158,11,0.3);
-      color: var(--amber);
-    }
-    .badge-vlm {
-      background: rgba(34,211,238,0.07);
-      border: 0.5px solid rgba(34,211,238,0.2);
-      color: var(--cyan);
-    }
-    .badge-robotics {
-      background: rgba(139,92,246,0.07);
-      border: 0.5px solid rgba(139,92,246,0.2);
-      color: var(--purple);
-    }
-    .paper-title {
-      font-family: var(--font-display);
-      font-size: clamp(16px, 2.8vw, 24px);
-      font-weight: 800;
-      letter-spacing: -0.6px;
-      line-height: 1.2;
-      background: linear-gradient(90deg, #22D3EE 0%, #8B5CF6 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 10px;
-    }
-    .paper-authors {
-      font-size: 11px;
-      color: var(--muted);
-      margin-bottom: 14px;
-    }
-    .paper-authors span { color: var(--cyan); }
-    .paper-abstract {
-      font-size: 12px;
-      color: var(--muted);
-      line-height: 1.85;
-      border-left: 2px solid rgba(34,211,238,0.2);
-      padding-left: 14px;
-    }
-
-    /* ── Two-col layout for side sections ── */
-    .two-col {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-    }
-    .three-col {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 12px;
-    }
-
-    /* ── Generic info card ── */
-    .info-card {
-      background: rgba(17,24,39,0.6);
-      border: 0.5px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 16px 18px;
-      transition: border-color 0.2s ease;
-      position: relative;
-      overflow: hidden;
-    }
-    .info-card:hover { border-color: rgba(34,211,238,0.22); }
-    .info-card-title {
-      font-size: 11.5px;
-      color: var(--soft);
-      font-weight: 500;
-      margin-bottom: 7px;
-      display: flex;
-      align-items: center;
-      gap: 7px;
-    }
-    .info-card-icon {
-      width: 18px; height: 18px;
-      border-radius: 4px;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
-    }
-    .info-card-body {
-      font-size: 11.5px;
-      color: var(--muted);
-      line-height: 1.8;
-    }
-
-    /* ── POMDP tuple ── */
-    .pomdp-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
-    }
-    .pomdp-row {
-      display: grid;
-      grid-template-columns: 28px 1fr;
-      gap: 10px;
-      align-items: start;
-    }
-    .pomdp-key {
-      font-size: 11px;
-      color: var(--cyan);
-      font-weight: 700;
-      padding-top: 1px;
-    }
-    .pomdp-val {
-      font-size: 11px;
-      color: var(--muted);
-      line-height: 1.7;
-    }
-    .pomdp-val code {
-      font-size: 10.5px;
-      color: var(--green);
-      background: rgba(16,185,129,0.08);
-      padding: 1px 5px;
-      border-radius: 3px;
-    }
-
-    /* ── Dataset trajectory display ── */
-    .trajectory-card {
-      background: rgba(9,13,22,0.9);
-      border: 0.5px solid var(--border);
-      border-radius: var(--radius-md);
-      overflow: hidden;
-    }
-    .trajectory-card::before {
-      content: '';
-      display: block;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(16,185,129,0.4), transparent);
-    }
-    .traj-header {
-      padding: 10px 16px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      border-bottom: 0.5px solid var(--border);
-    }
-    .traj-header-label {
-      font-size: 9px;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--green);
-    }
-    .traj-body { padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; }
-    .traj-row {
-      display: grid;
-      grid-template-columns: 90px 1fr;
-      gap: 10px;
-      align-items: baseline;
-      font-size: 11.5px;
-    }
-    .traj-key {
-      color: var(--purple);
-      font-weight: 500;
-      font-size: 10.5px;
-      letter-spacing: 0.3px;
-    }
-    .traj-val { color: var(--soft); line-height: 1.6; }
-    .traj-val .neg { color: #EF4444; }
-    .traj-val .pos { color: var(--green); }
-    .traj-val .ask { color: var(--amber); }
-    .traj-val .tag { color: var(--cyan); font-size: 10px; }
-
-    /* ── Equation display ── */
-    .eq-block {
-      background: rgba(9,13,22,0.85);
-      border: 0.5px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 14px 18px;
-      font-size: 12px;
-      color: var(--soft);
-      line-height: 2;
-      overflow-x: auto;
-    }
-    .eq-block::before {
-      content: '';
-      display: block;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(139,92,246,0.4), transparent);
-      margin-bottom: 10px;
-    }
-    .eq { color: var(--soft); }
-    .eq-cyan { color: var(--cyan); }
-    .eq-purple { color: var(--purple); }
-    .eq-green { color: var(--green); }
-    .eq-amber { color: var(--amber); }
-    .eq-dim { color: var(--slate); font-size: 11px; }
-    .eq-label {
-      font-size: 9px;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--slate);
-      margin-bottom: 4px;
-    }
-    .eq-sep { display: block; height: 8px; }
-
-    /* ── Results tables ── */
-    .results-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 11.5px;
-    }
-    .results-table th {
-      font-size: 9px;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--slate);
-      text-align: left;
-      padding: 7px 12px;
-      border-bottom: 0.5px solid var(--border);
-      font-weight: 400;
-    }
-    .results-table td {
-      padding: 9px 12px;
-      color: var(--muted);
-      border-bottom: 0.5px solid rgba(255,255,255,0.04);
-    }
-    .results-table tr:last-child td { border-bottom: none; }
-    .results-table .metric { color: var(--soft); }
-    .results-table .val-good { color: var(--green); font-weight: 500; }
-    .results-table .val-warn { color: var(--amber); }
-
-    /* confusion matrix */
-    .confusion-grid {
-      display: grid;
-      grid-template-columns: auto 1fr 1fr;
-      gap: 3px;
-      font-size: 11px;
-      width: fit-content;
-      margin: 0 auto;
-    }
-    .cm-label {
-      display: flex; align-items: center; justify-content: center;
-      padding: 6px 10px;
-      color: var(--slate);
-      font-size: 9px;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-    }
-    .cm-cell {
-      width: 72px; height: 56px;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      border-radius: 5px;
-      font-size: 18px;
-      font-weight: 700;
-      font-family: var(--font-display);
-    }
-    .cm-cell small {
-      font-size: 8.5px;
-      font-family: var(--font-mono);
-      font-weight: 400;
-      letter-spacing: 0.5px;
-      margin-top: 2px;
-      opacity: 0.7;
-    }
-    .cm-tn { background: rgba(16,185,129,0.12); color: var(--green); }
-    .cm-fp { background: rgba(239,68,68,0.08); color: #EF4444; }
-    .cm-fn { background: rgba(239,68,68,0.08); color: #EF4444; }
-    .cm-tp { background: rgba(34,211,238,0.10); color: var(--cyan); }
-
-    /* ── Roadmap stages ── */
-    .roadmap {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-    .stage-card {
-      background: rgba(17,24,39,0.6);
-      border: 0.5px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: 14px 16px;
-      transition: border-color 0.2s ease;
-    }
-    .stage-card:hover { border-color: rgba(139,92,246,0.25); }
-    .stage-num {
-      font-size: 9px;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--purple);
-      margin-bottom: 6px;
-    }
-    .stage-title {
-      font-size: 12.5px;
-      color: var(--soft);
-      font-weight: 500;
-      margin-bottom: 8px;
-    }
-    .stage-rows { display: flex; flex-direction: column; gap: 5px; }
-    .stage-row {
-      display: grid;
-      grid-template-columns: 52px 1fr;
-      gap: 8px;
-      font-size: 11px;
-    }
-    .stage-row-key { color: var(--slate); }
-    .stage-row-val { color: var(--muted); }
-
-    /* ── Ambiguity taxonomy ── */
-    .taxonomy-list { display: flex; flex-direction: column; gap: 8px; }
-    .tax-item {
-      display: grid;
-      grid-template-columns: 130px 1fr;
-      gap: 12px;
-      align-items: start;
-      background: rgba(17,24,39,0.5);
-      border: 0.5px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 11px 14px;
-      transition: border-color 0.2s;
-    }
-    .tax-item:hover { border-color: rgba(34,211,238,0.2); }
-    .tax-type {
-      font-size: 10px;
-      font-weight: 500;
-      letter-spacing: 0.3px;
-    }
-    .tax-type.poly  { color: var(--cyan); }
-    .tax-type.pro   { color: var(--purple); }
-    .tax-type.spat  { color: var(--amber); }
-    .tax-type.safe  { color: #EF4444; }
-    .tax-example {
-      font-size: 11px;
-      color: var(--muted);
-      line-height: 1.65;
-    }
-    .tax-hindi {
-      display: inline-block;
-      font-style: italic;
-      color: var(--soft);
-      margin-right: 4px;
-    }
-
-    /* ── Decision breakdown bar ── */
-    .decision-bars { display: flex; flex-direction: column; gap: 7px; }
-    .db-row {
-      display: grid;
-      grid-template-columns: 120px 1fr 36px;
-      gap: 10px;
-      align-items: center;
-      font-size: 11px;
-    }
-    .db-label { color: var(--muted); }
-    .db-bar-wrap {
-      background: rgba(255,255,255,0.05);
-      border-radius: 2px;
-      height: 6px;
-      overflow: hidden;
-    }
-    .db-bar {
-      height: 100%;
-      border-radius: 2px;
-      transition: width 1s ease;
-    }
-    .db-count { color: var(--slate); text-align: right; }
-    .bar-green  { background: var(--green); }
-    .bar-red    { background: #EF4444; }
-    .bar-amber  { background: var(--amber); }
-    .bar-slate  { background: var(--slate); }
-
-    /* ── Inference loop ── */
-    .infer-flow {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-    .infer-step {
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
-    }
-    .infer-num {
-      width: 20px; height: 20px;
-      border-radius: 50%;
-      border: 1px solid rgba(34,211,238,0.3);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 9px;
-      color: var(--cyan);
-      flex-shrink: 0;
-    }
-    .infer-text {
-      font-size: 11.5px;
-      color: var(--muted);
-      line-height: 1.7;
-      padding-top: 2px;
-    }
-    .infer-text code {
-      font-size: 10.5px;
-      color: var(--amber);
-      background: rgba(245,158,11,0.08);
-      padding: 1px 5px;
-      border-radius: 3px;
-    }
-    .infer-connector {
-      width: 1px;
-      height: 10px;
-      background: var(--border);
-      margin-left: 9px;
-    }
-
-    /* ── Progress / current work ── */
-    .progress-list { display: flex; flex-direction: column; gap: 6px; }
-    .progress-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 11.5px;
-      color: var(--muted);
-      padding: 7px 12px;
-      background: rgba(17,24,39,0.4);
-      border-radius: var(--radius-sm);
-      border: 0.5px solid var(--border);
-    }
-    .progress-dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-    .dot-done   { background: var(--green); }
-    .dot-active { background: var(--amber); animation: pulse-green 2s infinite; }
-    .dot-todo   { background: var(--slate); }
-
-    /* ── Responsive ── */
-    @media (max-width: 860px) {
-      .three-col { grid-template-columns: 1fr 1fr; }
-    }
-    @media (max-width: 680px) {
-      .two-col   { grid-template-columns: 1fr; }
-      .three-col { grid-template-columns: 1fr; }
-      .roadmap   { grid-template-columns: 1fr; }
-      .tax-item  { grid-template-columns: 1fr; }
-      .traj-row  { grid-template-columns: 70px 1fr; }
-      .db-row    { grid-template-columns: 90px 1fr 30px; }
-    }
-  </style>
 </head>
-<body>
+<body data-page="research">
   <div class="grid-bg" aria-hidden="true"></div>
-  <div class="orb orb1" aria-hidden="true"></div>
-  <div class="orb orb2" aria-hidden="true"></div>
 
   <div class="layout">
 
-    <!-- Sidebar injected here automatically by sidebar.js -->
     <div id="sidebar-root"></div>
 
-    <!-- MAIN COLUMN -->
     <div class="main-col">
 
-      <!-- TOP BAR -->
       <header class="topbar">
         <div class="topbar-left">
-          <div class="dots">
+          <div class="dots" aria-hidden="true">
             <div class="dot dot-r"></div>
             <div class="dot dot-y"></div>
             <div class="dot dot-g"></div>
           </div>
           <span class="topbar-path">
-            <a href="../" style="color:var(--slate)">~/portfolio</a> / research
+            <a href="../index.html">~/portfolio</a> / research
           </span>
         </div>
         <div class="topbar-right">
           <span class="online-status">
-            <span class="online-dot"></span>online
+            <span class="online-dot" aria-hidden="true"></span>online
           </span>
         </div>
       </header>
 
-      <!-- ①  PAPER HERO -->
-      <div class="rs-section" id="overview">
+      <!-- ① HERO -->
+      <div class="page-section">
         <div class="paper-hero">
           <div class="paper-status-row">
-            <span class="paper-badge badge-wip">Work in Progress</span>
-            <span class="paper-badge badge-vlm">VLM / LLM</span>
-            <span class="paper-badge badge-robotics">Robotics</span>
-            <span class="paper-badge badge-vlm" style="background:rgba(16,185,129,0.07);border-color:rgba(16,185,129,0.2);color:var(--green);">C-Learning</span>
+            <span class="paper-badge badge-wip">Ongoing</span>
+            <span class="paper-badge badge-cyan">LLM Agents</span>
+            <span class="paper-badge badge-purple">Medical AI</span>
+            <span class="paper-badge badge-green">Uncertainty Estimation</span>
           </div>
-          <div class="paper-title">Ambiguity Minimization in VLMs<br/>using Contrastive Classification</div>
+          <h1 class="paper-title">Reliable and Interpretable Medical AI<br />Tool Orchestration for Cardiac MRI</h1>
           <div class="paper-authors">
-            <span>Singampalli Sri Varshith</span> &nbsp;·&nbsp; June 2026 &nbsp;·&nbsp; Research Proposal
+            <span>Singampalli Sri Varshith</span>
+            &nbsp;·&nbsp; Guide: Prof. Arnab Bhattacharya, Department of CSE, IIT Kanpur
+            &nbsp;·&nbsp; July 2026 — Present
           </div>
           <div class="paper-abstract">
-            In cross-lingual robotic control, VLMs processing vernacular instructions (e.g., Hindi) 
-            frequently encounter underspecified intents — such as <em>"mug uthao"</em> when two mugs are 
-            present. Standard supervised fine-tuning forces the model to guess, producing catastrophic 
-            physical failures. We frame this as a probabilistic goal-reaching problem inspired by 
-            C-Learning, partitioning the interaction space into <em>Ambiguous</em> and <em>Unambiguous</em> 
-            states. A two-stage framework first trains a binary classifier over VLM embeddings to model 
-            the density of unambiguous actions, then extracts a policy using classifier-guided AWR that 
-            learns to ask clarification questions before committing to execution.
+            An agent answering a cardiac MRI question does not produce one decision — it produces a
+            chain of them: which tools to invoke, in what order, with what inputs, and how much to
+            trust each result. Final-answer accuracy collapses all of that into a single number, and
+            in doing so hides the failure mode that matters clinically: an agent that reached the
+            right answer through the wrong reasoning, or reached it by luck. This work builds the
+            ground truth and the evaluation machinery to score the <em>trajectory</em> rather than
+            just its endpoint, and layers uncertainty estimation across every level of the workflow
+            so the agent can report how confident it actually is.
           </div>
         </div>
       </div>
 
-      <!-- ② PROBLEM FORMULATION -->
-      <div class="rs-section" id="formulation">
-        <div class="rs-label">Problem Formulation</div>
+      <!-- ② THE PROBLEM -->
+      <div class="page-section">
+        <div class="section-label">Why Final-Answer Accuracy Is Not Enough</div>
         <div class="two-col">
 
-          <!-- POMDP -->
           <div class="info-card">
             <div class="info-card-title">
-              <div class="info-card-icon" style="background:rgba(34,211,238,0.08);">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="1.5"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2v-4M9 21H5a2 2 0 01-2-2v-4m0 0h18"/></svg>
+              <div class="info-card-icon" style="background: var(--danger-soft);">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="color: var(--danger);"><path d="M12 9v4M12 17h.01"/><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
               </div>
-              POMDP Tuple &nbsp;<span style="color:var(--slate);font-size:10px;font-weight:400">M = (S, A, P, O)</span>
-            </div>
-            <div class="pomdp-grid">
-              <div class="pomdp-row">
-                <div class="pomdp-key">S</div>
-                <div class="pomdp-val">True hidden user intent — the latent task index k* ∈ {1,…,K}</div>
-              </div>
-              <div class="pomdp-row">
-                <div class="pomdp-key">O</div>
-                <div class="pomdp-val">Robot's context: visual scene + dialogue history up to turn t</div>
-              </div>
-              <div class="pomdp-row">
-                <div class="pomdp-key">A</div>
-                <div class="pomdp-val">Either <code>a_ask</code> (clarification query) or <code>COMMIT(k)</code> (terminal retrieval)</div>
-              </div>
-              <div class="pomdp-row">
-                <div class="pomdp-key">P</div>
-                <div class="pomdp-val">Transition driven by user responses; good questions reduce task uncertainty</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Task Retrieval -->
-          <div class="info-card">
-            <div class="info-card-title">
-              <div class="info-card-icon" style="background:rgba(139,92,246,0.08);">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-              </div>
-              Multi-Turn Task Retrieval
+              What a single accuracy number hides
             </div>
             <div class="info-card-body">
-              <p style="margin-bottom:10px;">
-                Instead of generating a free-form plan, the agent maps ambiguous dialogue to one 
-                canonical task from a fixed library T = {t₁, …, t_K}.
+              <p>
+                Two agents can score identically on final-answer accuracy while behaving completely
+                differently underneath. One selects the correct tools and sequences them properly.
+                The other calls six tools where two would do, ignores half the outputs, and lands on
+                the right answer anyway.
               </p>
-              <div style="background:rgba(9,13,22,0.6);border:0.5px solid var(--border);border-radius:4px;padding:10px 12px;font-size:11px;line-height:1.9;">
-                <span style="color:var(--slate)">e.g. t₈ =</span>
-                <span style="color:var(--soft)"> pick up the ketchup and place it in the basket</span><br/>
-                <span style="color:var(--slate)">e.g. t₉ =</span>
-                <span style="color:var(--soft)"> pick up the salad dressing and place it in the basket</span>
+              <p>
+                In a clinical setting those are not equivalent systems. The second is unreliable in a
+                way the metric cannot see, and will fail unpredictably on the next case.
+              </p>
+            </div>
+          </div>
+
+          <div class="info-card">
+            <div class="info-card-title">
+              <div class="info-card-icon" style="background: var(--accent-soft);">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="color: var(--accent);"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
               </div>
-              <p style="margin-top:10px;">
-                The key shift: <span style="color:var(--cyan)">ambiguous instruction → clarification dialogue → retrieve t_k*</span>
+              What the trajectory tells you instead
+            </div>
+            <div class="info-card-body">
+              <p>
+                Annotate the tools a question actually <em>requires</em>, the ones that are merely
+                <em>optional</em>, and the ones that are <em>irrelevant</em> — plus the expected
+                calling sequence and inputs — and the behaviour becomes measurable.
+              </p>
+              <p>
+                You can then ask precise questions: did it pick the required tools? did it call
+                anything unnecessary? did it order them correctly? did it miss something it needed?
               </p>
             </div>
           </div>
@@ -633,297 +116,191 @@
         </div>
       </div>
 
-      <!-- ③ METHOD -->
-      <div class="rs-section" id="method">
-        <div class="rs-label">Two-Stage Method</div>
+      <!-- ③ GROUND TRUTH -->
+      <div class="page-section">
+        <div class="section-label">Ground-Truth Tool-Call Trajectories</div>
+        <div class="info-card">
+          <div class="info-card-title">Annotation schema</div>
+          <div class="info-card-body" style="margin-bottom: 14px;">
+            Each cardiac MRI question is annotated with a full reference trajectory, not just a
+            reference answer. This is what makes systematic evaluation of agent orchestration
+            possible in the first place.
+          </div>
+          <div class="def-grid">
+            <div class="def-row">
+              <div class="def-key">required</div>
+              <div class="def-val">Tools the question cannot be answered correctly without. Missing one is a hard failure.</div>
+            </div>
+            <div class="def-row">
+              <div class="def-key">optional</div>
+              <div class="def-val">Tools that add supporting evidence but are not strictly necessary. Calling them is neither rewarded nor penalised.</div>
+            </div>
+            <div class="def-row">
+              <div class="def-key">irrelevant</div>
+              <div class="def-val">Tools with no bearing on the question. Calling one is an <em>unnecessary call</em> — noise, latency and a signal of poor reasoning.</div>
+            </div>
+            <div class="def-row">
+              <div class="def-key purple">sequence</div>
+              <div class="def-val">The expected order of calls. Some tools consume the output of others, so order is part of correctness, not a stylistic preference.</div>
+            </div>
+            <div class="def-row">
+              <div class="def-key purple">inputs</div>
+              <div class="def-val">The expected arguments to each call. A tool invoked correctly but parameterised wrongly still produces a wrong result.</div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-        <!-- Training tuple -->
-        <div style="margin-bottom:14px;">
-          <div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--slate);margin-bottom:8px;">Training Tuple τ</div>
-          <div class="trajectory-card">
-            <div class="traj-header">
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-              <span class="traj-header-label">Example — Sauce Ambiguity Group</span>
+      <!-- ④ EVALUATION HARNESS -->
+      <div class="page-section">
+        <div class="section-label">Tool-Calling Evaluation Harness</div>
+        <div class="two-col">
+
+          <div class="info-card">
+            <div class="info-card-title">Metrics beyond final-answer accuracy</div>
+            <div class="table-scroll">
+              <table class="results-table">
+                <thead>
+                  <tr><th>Metric</th><th>What it catches</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="metric">Tool-selection precision</td>
+                    <td>Calling tools that weren't needed</td>
+                  </tr>
+                  <tr>
+                    <td class="metric">Tool-selection recall</td>
+                    <td>Failing to call tools that were required</td>
+                  </tr>
+                  <tr>
+                    <td class="metric">F1</td>
+                    <td>The balance between the two</td>
+                  </tr>
+                  <tr>
+                    <td class="metric">Sequence correctness</td>
+                    <td>Right tools, wrong order — broken data dependencies</td>
+                  </tr>
+                  <tr>
+                    <td class="metric">Unnecessary-call rate</td>
+                    <td>Cost, latency and reasoning noise</td>
+                  </tr>
+                  <tr>
+                    <td class="metric">Missed-tool rate</td>
+                    <td>Answers produced from incomplete evidence</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
-            <div class="traj-body">
-              <div class="traj-row">
-                <div class="traj-key">o_ambig</div>
-                <div class="traj-val">Scene: ketchup bottle + salad dressing visible. Instruction: <span class="ask">"put the sauce in the basket"</span></div>
+          </div>
+
+          <div class="info-card">
+            <div class="info-card-title">Evaluation loop</div>
+            <div class="infer-flow">
+              <div class="infer-step">
+                <div class="infer-num">1</div>
+                <div class="infer-text">Agent receives a cardiac MRI question and produces a full tool-call trace</div>
               </div>
-              <div class="traj-row">
-                <div class="traj-key">k_guess</div>
-                <div class="traj-val"><span class="neg">k=8</span> — premature/wrong commitment &nbsp;<span class="tag">y=0 (negative)</span></div>
+              <div class="infer-connector"></div>
+              <div class="infer-step">
+                <div class="infer-num">2</div>
+                <div class="infer-text">Trace is aligned against the annotated reference trajectory for that question</div>
               </div>
-              <div class="traj-row">
-                <div class="traj-key">a_ask</div>
-                <div class="traj-val"><span class="ask">"Do you mean the red one or the dressing bottle?"</span> &nbsp;<span class="tag">y=1 (positive)</span></div>
+              <div class="infer-connector"></div>
+              <div class="infer-step">
+                <div class="infer-num">3</div>
+                <div class="infer-text">Selection metrics scored against <code>required</code> / <code>optional</code> / <code>irrelevant</code> labels</div>
               </div>
-              <div class="traj-row">
-                <div class="traj-key">user reply</div>
-                <div class="traj-val">"The dressing bottle."</div>
+              <div class="infer-connector"></div>
+              <div class="infer-step">
+                <div class="infer-num">4</div>
+                <div class="infer-text">Ordering scored against the expected sequence, independently of selection</div>
               </div>
-              <div class="traj-row">
-                <div class="traj-key">o_unambig</div>
-                <div class="traj-val">o_ambig + clarification turn + user reply</div>
-              </div>
-              <div class="traj-row">
-                <div class="traj-key">k* / a_plan</div>
-                <div class="traj-val"><span class="pos">k=9 · pick up the salad dressing and place it in the basket</span> &nbsp;<span class="tag">y=1 (positive)</span></div>
+              <div class="infer-connector"></div>
+              <div class="infer-step">
+                <div class="infer-num">5</div>
+                <div class="infer-text">Final answer scored separately — so a right answer from a wrong trajectory is visible, not absorbed</div>
               </div>
             </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ⑤ UNCERTAINTY -->
+      <div class="page-section">
+        <div class="section-label">Multi-Level Uncertainty Estimation</div>
+        <div class="info-card" style="margin-bottom: 12px;">
+          <div class="info-card-body">
+            A single confidence score attached to the final answer tells a clinician almost nothing
+            about <em>where</em> the agent was unsure. Uncertainty is estimated at four distinct
+            levels instead, so low confidence can be traced to its origin — a wavering tool choice,
+            a noisy tool output, an unreliable workflow shape, or genuine ambiguity in the clinical
+            answer itself.
           </div>
         </div>
 
         <div class="two-col">
-
-          <!-- Phase 1 -->
           <div class="info-card">
-            <div class="info-card-title" style="color:var(--cyan);">
-              Phase 1 — Ambiguity Classifier C_θ
-            </div>
-            <div class="info-card-body" style="margin-bottom:12px;">
-              Frozen VLM extracts embeddings [o_emb ; a_emb]. A lightweight 3-layer MLP 
-              predicts whether the action is ambiguity-resolving. Trained on BCE over 
-              positive and negative pairs.
-            </div>
-            <div class="eq-block">
-              <div class="eq-label">Architecture</div>
-              <span class="eq-cyan">e</span> = VLM<sub>frozen</sub>(<span class="eq-purple">o</span>, <span class="eq-amber">a</span>)<br/>
-              <span class="eq-cyan">C_θ</span>(<span class="eq-purple">o</span>, <span class="eq-amber">a</span>) = σ(MLP<sub>θ</sub>(<span class="eq-cyan">e</span>))<br/>
-              <span class="eq-sep"></span>
-              <div class="eq-label">Loss</div>
-              <span class="eq-dim">L = −𝔼[</span>
-              log C_θ(<span class="eq-purple">o_unambig</span>, <span class="eq-green">a_plan</span>)<br/>
-              <span style="margin-left:20px">+ log C_θ(<span class="eq-purple">o_ambig</span>, <span class="eq-green">a_ask</span>)</span><br/>
-              <span style="margin-left:20px">+ log(1 − C_θ(<span class="eq-purple">o_ambig</span>, <span style="color:#EF4444">a_guess</span>))]</span>
+            <div class="info-card-title" style="color: var(--accent);">Level 1 — Tool selection</div>
+            <div class="info-card-body">
+              How confident is the agent that this is the right tool for this question? Low
+              confidence here suggests the question is out of scope for the available toolset.
             </div>
           </div>
-
-          <!-- Phase 2 -->
           <div class="info-card">
-            <div class="info-card-title" style="color:var(--purple);">
-              Phase 2 — Policy π_φ via AWR
-            </div>
-            <div class="info-card-body" style="margin-bottom:12px;">
-              Qwen2-VL-2B fine-tuned with LoRA. Frozen C_θ weights ambiguity-resolving 
-              trajectories via Advantage-Weighted Regression. Low C_θ ≈ 0 suppresses guessing; 
-              high C_θ ≈ 1 amplifies <code style="color:var(--amber);background:rgba(245,158,11,0.08);padding:1px 5px;border-radius:3px;font-size:10px">&lt;question&gt;</code> and <code style="color:var(--amber);background:rgba(245,158,11,0.08);padding:1px 5px;border-radius:3px;font-size:10px">&lt;output&gt;</code> tokens.
-            </div>
-            <div class="eq-block">
-              <div class="eq-label">Policy Loss (AWR)</div>
-              <span class="eq-dim">w(o,a) = exp(</span><span class="eq-cyan">C_θ(o,a)</span><span class="eq-dim"> / β)</span><br/><br/>
-              <span class="eq-dim">L_policy = −𝔼[</span> w(o₁,a₁) log π_φ(a₁|o₁)<br/>
-              <span style="margin-left:44px">+ w(o₂,a₂) log π_φ(a₂|o₂)</span><br/>
-              <span style="margin-left:44px">+ w(o₃,a₃) log π_φ(a₃|o₃)<span class="eq-dim">]</span></span><br/>
-              <span class="eq-sep"></span>
-              <div class="eq-label">Three I/O pairs</div>
-              <span class="eq-dim">o₁=ambig → a₁=</span><span class="eq-green">&lt;question&gt;</span><br/>
-              <span class="eq-dim">o₂=ambig → a₂=</span><span style="color:#EF4444">&lt;wrong output&gt;</span><br/>
-              <span class="eq-dim">o₃=resolved → a₃=</span><span class="eq-cyan">&lt;output&gt;</span>
+            <div class="info-card-title" style="color: var(--violet);">Level 2 — Individual tool outputs</div>
+            <div class="info-card-body">
+              How reliable is what each tool returned? A correctly chosen tool can still produce a
+              low-quality result on a difficult scan.
             </div>
           </div>
-
-        </div>
-      </div>
-
-      <!-- ④ RESULTS -->
-      <div class="rs-section" id="results">
-        <div class="rs-label">Experimental Results</div>
-        <div style="font-size:10px;color:var(--slate);margin-bottom:12px;">
-          Dataset: 1000 synthetic samples · Train 700 / Val 150 / Test 150 · Model: Qwen2-VL-2B-Instruct + LoRA
-        </div>
-
-        <div class="two-col" style="margin-bottom:14px;">
-
-          <!-- Phase 1 table -->
           <div class="info-card">
-            <div class="info-card-title">Phase 1 — Classifier Performance</div>
-            <table class="results-table">
-              <thead>
-                <tr><th>Metric</th><th>Value</th></tr>
-              </thead>
-              <tbody>
-                <tr><td class="metric">Accuracy</td>     <td class="val-good">99.33%</td></tr>
-                <tr><td class="metric">Precision</td>    <td class="val-good">100.00%</td></tr>
-                <tr><td class="metric">Recall</td>       <td class="val-good">99.11%</td></tr>
-                <tr><td class="metric">F1-Score</td>     <td class="val-good">99.55%</td></tr>
-                <tr><td class="metric">ROC-AUC</td>      <td class="val-good">0.9996</td></tr>
-              </tbody>
-            </table>
-            <div style="margin-top:14px;">
-              <div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--slate);margin-bottom:10px;">Confusion Matrix</div>
-              <div class="confusion-grid">
-                <div class="cm-label"></div>
-                <div class="cm-label">Pred 0</div>
-                <div class="cm-label">Pred 1</div>
-                <div class="cm-label">Act 0</div>
-                <div class="cm-cell cm-tn">75<small>TN</small></div>
-                <div class="cm-cell cm-fp">0<small>FP</small></div>
-                <div class="cm-label">Act 1</div>
-                <div class="cm-cell cm-fn">2<small>FN</small></div>
-                <div class="cm-cell cm-tp">223<small>TP</small></div>
-              </div>
+            <div class="info-card-title" style="color: var(--warn);">Level 3 — Workflow-level call sequences</div>
+            <div class="info-card-body">
+              How confident is the agent in the shape of the whole trajectory? This is where
+              compounding errors across a chain of calls become visible.
             </div>
           </div>
-
-          <!-- Phase 2 table -->
           <div class="info-card">
-            <div class="info-card-title">Phase 2 — Policy Performance (Epoch 12)</div>
-            <table class="results-table">
-              <thead>
-                <tr><th>Metric</th><th>Value</th></tr>
-              </thead>
-              <tbody>
-                <tr><td class="metric">Plan Exact Match</td>      <td class="val-good">72%</td></tr>
-                <tr><td class="metric">Question ROUGE-L</td>      <td class="val-warn">0.6753</td></tr>
-                <tr><td class="metric">Question LLM Judge</td>    <td class="val-warn">0.68</td></tr>
-                <tr><td class="metric">Decision Accuracy</td>     <td class="val-good">98%</td></tr>
-              </tbody>
-            </table>
-            <div style="margin-top:14px;">
-              <div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--slate);margin-bottom:10px;">Decision Breakdown (150 test)</div>
-              <div class="decision-bars">
-                <div class="db-row">
-                  <div class="db-label">Correct Ask</div>
-                  <div class="db-bar-wrap"><div class="db-bar bar-green" style="width:49.3%"></div></div>
-                  <div class="db-count">74</div>
-                </div>
-                <div class="db-row">
-                  <div class="db-label">Correct Plan</div>
-                  <div class="db-bar-wrap"><div class="db-bar bar-green" style="width:48.7%"></div></div>
-                  <div class="db-count">73</div>
-                </div>
-                <div class="db-row">
-                  <div class="db-label">Spurious Plan</div>
-                  <div class="db-bar-wrap"><div class="db-bar bar-red" style="width:0.7%"></div></div>
-                  <div class="db-count">1</div>
-                </div>
-                <div class="db-row">
-                  <div class="db-label">Over Ask</div>
-                  <div class="db-bar-wrap"><div class="db-bar bar-amber" style="width:1.3%"></div></div>
-                  <div class="db-count">2</div>
-                </div>
-                <div class="db-row">
-                  <div class="db-label">Format Error</div>
-                  <div class="db-bar-wrap"><div class="db-bar bar-slate" style="width:0%"></div></div>
-                  <div class="db-count">0</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-        <!-- Inference loop -->
-        <div class="info-card">
-          <div class="info-card-title">End-to-End Inference Loop</div>
-          <div class="infer-flow">
-            <div class="infer-step">
-              <div class="infer-num">1</div>
-              <div class="infer-text">Input observation = [Image + Scene Description + Query] fed to the fine-tuned VLM</div>
-            </div>
-            <div class="infer-connector"></div>
-            <div class="infer-step">
-              <div class="infer-num">2</div>
-              <div class="infer-text">VLM autoregressively generates response wrapped in XML tags: <code>&lt;question&gt;</code> or <code>&lt;output&gt;</code></div>
-            </div>
-            <div class="infer-connector"></div>
-            <div class="infer-step">
-              <div class="infer-num">3</div>
-              <div class="infer-text">If <code>&lt;question&gt;</code> → ask human, append reply to observation history, loop back to step 1</div>
-            </div>
-            <div class="infer-connector"></div>
-            <div class="infer-step">
-              <div class="infer-num">4</div>
-              <div class="infer-text">If <code>&lt;output&gt;</code> → extract canonical task string, forward to frozen downstream VLA (e.g., OpenVLA, Pi0.5) for motor execution</div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- ⑤ AMBIGUITY TAXONOMY -->
-      <div class="rs-section" id="taxonomy">
-        <div class="rs-label">Cross-Lingual Ambiguity Taxonomy</div>
-        <div class="taxonomy-list">
-          <div class="tax-item">
-            <div class="tax-type poly">Lexical / Action Polysemy</div>
-            <div class="tax-example">
-              <span class="tax-hindi">"Butter laga do"</span> — <em>laga do</em> means attach / place / apply. 
-              Could be <code style="font-size:10px;color:var(--green)">place(butter, table)</code> or 
-              <code style="font-size:10px;color:var(--green)">smear(butter, bread)</code>. VLM must output <code style="font-size:10px;color:var(--amber)">&lt;question&gt;</code>.
-            </div>
-          </div>
-          <div class="tax-item">
-            <div class="tax-type pro">Pro-Drop (Implicit Args)</div>
-            <div class="tax-example">
-              <span class="tax-hindi">"Nikaal lo"</span> — Hindi grammatically permits dropping the object. 
-              "Take [it] out" lacks the target argument required by the English VLA.
-            </div>
-          </div>
-          <div class="tax-item">
-            <div class="tax-type spat">Spatial Frame-of-Reference</div>
-            <div class="tax-example">
-              <span class="tax-hindi">"Uss ke aage rakho"</span> — "Put it in front of that" can mean 
-              intrinsic (touching the object) or relative (between object and user). Spatial frame is underspecified.
-            </div>
-          </div>
-          <div class="tax-item">
-            <div class="tax-type safe">Safety / Irreversibility</div>
-            <div class="tax-example">
-              <span class="tax-hindi">"Hata do"</span> — can mean <em>move</em> or <em>throw away</em>. 
-              If directed at an important document, guessing wrong leads to irreversible destruction. 
-              Mandatory clarification.
+            <div class="info-card-title" style="color: var(--success);">Level 4 — Final clinical answer</div>
+            <div class="info-card-body">
+              The end-to-end confidence a clinician actually sees — now decomposable into the three
+              levels underneath it rather than opaque.
             </div>
           </div>
         </div>
       </div>
 
-      <!-- ⑥ ROADMAP -->
-      <div class="rs-section" id="roadmap">
-        <div class="rs-label">Implementation Roadmap</div>
-        <div class="roadmap">
-          <div class="stage-card">
-            <div class="stage-num">Stage 1 · PoC</div>
-            <div class="stage-title">English-Only Retrieval Baseline</div>
-            <div class="stage-rows">
-              <div class="stage-row"><div class="stage-row-key">Model</div><div class="stage-row-val">Qwen2-VL-2B-Instruct (12GB GPU)</div></div>
-              <div class="stage-row"><div class="stage-row-key">Data</div><div class="stage-row-val">1,000 synthetic tuples · LIBERO frames · English ambiguity</div></div>
-              <div class="stage-row"><div class="stage-row-key">Goal</div><div class="stage-row-val">Validate C-Learning math on raw pixels; prove &lt;question&gt; / &lt;output&gt; routing</div></div>
-            </div>
-          </div>
-          <div class="stage-card">
-            <div class="stage-num">Stage 2 · Scale</div>
-            <div class="stage-title">Cross-Lingual & Complex Ambiguity</div>
-            <div class="stage-rows">
-              <div class="stage-row"><div class="stage-row-key">Model</div><div class="stage-row-val">LLaVA-1.5-8B or Qwen-VL-7B</div></div>
-              <div class="stage-row"><div class="stage-row-key">Data</div><div class="stage-row-val">5,000+ tuples · Hindi instructions → English LIBERO tasks</div></div>
-              <div class="stage-row"><div class="stage-row-key">Goal</div><div class="stage-row-val">Full IndicGround dataset · all 4 ambiguity types · publication</div></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ⑦ CURRENT WORK -->
-      <div class="rs-section">
-        <div class="rs-label">Current Status</div>
+      <!-- ⑥ CURRENT STATUS -->
+      <div class="page-section">
+        <div class="section-label">Current Status</div>
         <div class="progress-list">
-          <div class="progress-item"><span class="progress-dot dot-done"></span>Phase 1 classifier training — 99.33% accuracy achieved</div>
-          <div class="progress-item"><span class="progress-dot dot-done"></span>Phase 2 policy training — LoRA fine-tuning, best checkpoint Epoch 12</div>
-          <div class="progress-item"><span class="progress-dot dot-done"></span>Evaluation framework — Exact Match, ROUGE-L, LLM-Judge, Decision Accuracy</div>
-          <div class="progress-item"><span class="progress-dot dot-active"></span>End-to-end orchestration of ambiguity-aware inference pipeline</div>
-          <div class="progress-item"><span class="progress-dot dot-active"></span>Real-time multi-turn dialogue-based inference &amp; custom user-input evaluation</div>
-          <div class="progress-item"><span class="progress-dot dot-active"></span>Overfitting mitigation for Phase 2 small-data training</div>
-          <div class="progress-item"><span class="progress-dot dot-todo"></span>Hindi / Indic instruction extension (Stage 2) — IndicGround dataset</div>
-          <div class="progress-item"><span class="progress-dot dot-todo"></span>Integration with downstream VLA (OpenVLA / Pi0.5) — end-to-end robot execution</div>
+          <div class="progress-item">
+            <span class="progress-dot dot-active" aria-hidden="true"></span>
+            Curating ground-truth tool-call trajectories — required / optional / irrelevant tool annotation with expected sequences and inputs
+          </div>
+          <div class="progress-item">
+            <span class="progress-dot dot-active" aria-hidden="true"></span>
+            Building the tool-calling evaluation harness — selection precision / recall / F1, sequence correctness, unnecessary and missed tool rates
+          </div>
+          <div class="progress-item">
+            <span class="progress-dot dot-active" aria-hidden="true"></span>
+            Exploring multi-level uncertainty estimation across tool selection, tool outputs, call sequences and final clinical answers
+          </div>
+          <div class="progress-item">
+            <span class="progress-dot dot-todo" aria-hidden="true"></span>
+            Quantifying agent confidence end to end and correlating it with trajectory-level correctness
+          </div>
+          <div class="progress-item">
+            <span class="progress-dot dot-todo" aria-hidden="true"></span>
+            Improving interpretability and reliability of medical tool orchestration on the back of those signals
+          </div>
         </div>
       </div>
 
     </div>
   </div>
 
-  <!-- Load sidebar component (adjust path relative to this file's location) -->
-  <script src="../components/sidebar_pages.js"></script>
-  <script src="../main.js"></script>
+  <script src="../components/sidebar.js"></script>
 </body>
 </html>

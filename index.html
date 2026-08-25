@@ -5,20 +5,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Singampalli Sri Varshith</title>
-  <meta name="description" content="ML Enthusiast · Thinker · Cinephile" />
+  <meta name="description" content="M.Tech CSE at IIT Kanpur — retrieval systems, medical AI tool orchestration, and concurrency-correct backends." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
+<body data-page="home">
   <div class="grid-bg" aria-hidden="true"></div>
-  <div class="orb orb1" aria-hidden="true"></div>
-  <div class="orb orb2" aria-hidden="true"></div>
 
   <div class="layout">
 
-    <!-- Sidebar injected here automatically by sidebar.js -->
+    <div id="sidebar-root"></div>
 
     <!-- MAIN COLUMN -->
     <div class="main-col">
@@ -48,19 +47,66 @@
       <!-- HERO -->
       <section class="hero" aria-label="Introduction">
         <h1 class="hero-name">Singampalli<br />Sri Varshith</h1>
-        <p class="hero-title"><span>ML Enthusiast</span></p>
-        <p class="hero-bio">
-          I build AI systems that automate the hard stuff — browser agents that navigate the web,
-          pipelines that moderate content at scale, and tools that make developers faster.
-          Currently exploring the edges of what LLMs can do when given real autonomy.
+        <p class="hero-title">
+          <span>M.Tech CSE, IIT Kanpur</span> · ML Systems · Competitive Programmer
         </p>
+        <p class="hero-bio">
+          I work on making AI systems verifiable rather than merely convincing — retrieval that
+          cites the line it answered from, agents whose tool calls can be scored against a
+          ground-truth trajectory, and classifiers that abstain instead of guessing. Currently
+          researching reliable and interpretable medical AI tool orchestration for cardiac MRI
+          at IIT Kanpur. When I'm not training models, I'm writing concurrency-correct backends
+          or solving problems on Codeforces.
+        </p>
+
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="./pages/projects.html">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
+              <rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
+            </svg>
+            View projects
+          </a>
+          <a class="btn btn-ghost" href="./pages/resume.html">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+            </svg>
+            Resume
+          </a>
+          <a class="btn btn-ghost" href="./pages/contact.html">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+            Get in touch
+          </a>
+        </div>
+
+        <div class="hero-stats">
+          <div>
+            <div class="hero-stat-val">11</div>
+            <div class="hero-stat-label">Projects shipped</div>
+          </div>
+          <div>
+            <div class="hero-stat-val">3×</div>
+            <div class="hero-stat-label">ICPC Regionalist</div>
+          </div>
+          <div>
+            <div class="hero-stat-val">1410</div>
+            <div class="hero-stat-label">Codeforces (Specialist)</div>
+          </div>
+          <div>
+            <div class="hero-stat-val">8.55</div>
+            <div class="hero-stat-label">M.Tech CPI</div>
+          </div>
+        </div>
       </section>
 
     </div>
   </div>
 
-  <!-- Load sidebar BEFORE main.js so it's in the DOM when scripts run -->
-  <script src="./components/sidebar_main.js"></script>
+  <script src="./components/sidebar.js"></script>
   <script src="main.js"></script>
 </body>
 </html>

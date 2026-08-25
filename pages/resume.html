@@ -1,371 +1,23 @@
+<!-- pages/resume.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <title>Resume — Sri Varshith</title>
+  <meta name="description" content="Resume of Singampalli Sri Varshith — M.Tech CSE, IIT Kanpur." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
-
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --bg:      #080c12;
-      --surface: #0d1117;
-      --border:  rgba(255,255,255,0.07);
-      --muted:   #8b929e;
-      --slate:   #4a5568;
-      --soft:    #cdd3de;
-      --cyan:    #22D3EE;
-      --purple:  #8B5CF6;
-      --green:   #10B981;
-      --amber:   #F59E0B;
-      --font-mono:    'JetBrains Mono', monospace;
-      --font-display: 'Syne', sans-serif;
-      --radius-sm: 4px;
-      --radius-md: 8px;
-      --transition: 0.2s ease;
-    }
-
-    html { scroll-behavior: smooth; }
-    body {
-      background: var(--bg);
-      color: var(--soft);
-      font-family: var(--font-mono);
-      font-size: 13px;
-      line-height: 1.6;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    .grid-bg {
-      position: fixed; inset: 0; pointer-events: none; z-index: 0;
-      background-image:
-        linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px);
-      background-size: 40px 40px;
-    }
-    .orb {
-      position: fixed; border-radius: 50%; pointer-events: none; z-index: 0;
-      filter: blur(80px); opacity: 0.12;
-    }
-    .orb1 { width: 500px; height: 500px; background: radial-gradient(circle, #22D3EE 0%, transparent 70%); top: -120px; right: -80px; }
-    .orb2 { width: 400px; height: 400px; background: radial-gradient(circle, #8B5CF6 0%, transparent 70%); bottom: -80px; left: -80px; }
-
-    /* ── Layout ── */
-    .layout {
-      position: relative; z-index: 1;
-      display: grid;
-      grid-template-columns: 260px 1fr;
-      min-height: 100vh;
-    }
-
-    /* Sidebar */
-    .side-panel {
-      position: sticky; top: 0; height: 100vh;
-      border-right: 0.5px solid var(--border);
-      overflow-y: auto;
-      opacity: 0;
-      animation: slide-up 0.5s 0.1s ease forwards;
-      background: rgba(9, 13, 22, 0.97);
-      backdrop-filter: blur(20px);
-      display: flex; flex-direction: column;
-    }
-    .panel-inner {
-      padding: 28px 18px; flex: 1;
-      display: flex; flex-direction: column;
-      position: relative; overflow: hidden;
-    }
-    .panel-inner::before {
-      content: ''; position: absolute;
-      top: 0; left: 0; right: 0; height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(139,92,246,0.4), transparent);
-    }
-    .panel-brand {
-      display: flex; align-items: center; gap: 10px;
-      margin-bottom: 32px; padding-bottom: 20px;
-      border-bottom: 0.5px solid rgba(255,255,255,0.06);
-    }
-    .panel-brand-dot {
-      width: 8px; height: 8px; border-radius: 50%;
-      background: var(--cyan);
-      animation: pulse-green 2s ease-in-out infinite; flex-shrink: 0;
-    }
-    .panel-brand-name {
-      font-family: var(--font-display); font-size: 13px;
-      font-weight: 700; color: var(--soft); letter-spacing: 0.3px;
-    }
-    .panel-label {
-      font-size: 9px; letter-spacing: 2px;
-      text-transform: uppercase; color: var(--slate);
-      margin-bottom: 8px; padding-left: 2px;
-    }
-    .panel-nav { display: flex; flex-direction: column; gap: 2px; margin-bottom: 16px; }
-    .panel-link {
-      display: flex; align-items: center; gap: 10px;
-      padding: 9px 12px; border-radius: var(--radius-sm);
-      font-size: 13px; color: var(--muted);
-      border: 0.5px solid transparent;
-      transition: all var(--transition);
-    }
-    .panel-link:hover { color: var(--cyan); background: rgba(34,211,238,0.06); border-color: rgba(34,211,238,0.15); }
-    .panel-link.active { color: var(--cyan); background: rgba(34,211,238,0.07); border-color: rgba(34,211,238,0.2); }
-    .panel-link-icon { display: flex; align-items: center; justify-content: center; width: 16px; flex-shrink: 0; color: inherit; opacity: 0.7; }
-    .panel-link:hover .panel-link-icon, .panel-link.active .panel-link-icon { opacity: 1; }
-    .panel-divider { height: 0.5px; background: rgba(255,255,255,0.06); margin: 8px 0; }
-    .panel-status {
-      margin-top: auto; display: flex; align-items: center; gap: 7px;
-      font-size: 9px; color: var(--slate);
-      padding: 16px 2px 0; border-top: 0.5px solid rgba(255,255,255,0.06);
-    }
-    .panel-link { text-decoration: none; }
-   .status-dot {
-      width: 5px; height: 5px; border-radius: 50%; background: var(--green);
-      animation: pulse-green 2s ease-in-out infinite; flex-shrink: 0;
-    }
-    .theme-toggle {
-      display: flex; align-items: center; gap: 10px;
-      width: 100%; padding: 9px 12px;
-      background: rgba(255,255,255,0.03);
-      border: 0.5px solid rgba(255,255,255,0.08);
-      border-radius: var(--radius-sm);
-      cursor: pointer; color: var(--muted);
-      font-family: var(--font-mono); font-size: 12px;
-      transition: all var(--transition); margin-bottom: 16px;
-    }
-    .theme-toggle:hover { background: rgba(34,211,238,0.06); border-color: rgba(34,211,238,0.2); color: var(--cyan); }
-    .theme-toggle-icon { display: flex; align-items: center; width: 16px; flex-shrink: 0; opacity: 0.8; }
-    .theme-toggle-label { flex: 1; text-align: left; }
-    .theme-toggle-badge {
-      font-size: 9px; letter-spacing: 1px; text-transform: uppercase;
-      padding: 2px 6px; border-radius: 2px;
-      background: rgba(255,255,255,0.05); border: 0.5px solid rgba(255,255,255,0.08);
-    }
-
-    /* ── Main column ── */
-    .main-col { display: flex; flex-direction: column; min-height: 100vh; overflow: hidden; }
-
-    /* ── Topbar ── */
-    .topbar {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 0 24px; height: 44px;
-      border-bottom: 0.5px solid var(--border);
-      background: rgba(8,12,18,0.7);
-      backdrop-filter: blur(8px);
-      position: sticky; top: 0; z-index: 10; flex-shrink: 0;
-    }
-    .topbar-left { display: flex; align-items: center; gap: 10px; }
-    .dots { display: flex; gap: 5px; }
-    .dot { width: 9px; height: 9px; border-radius: 50%; }
-    .dot-r { background: #FF5F57; } .dot-y { background: #FFBD2E; } .dot-g { background: #28CA42; }
-    .topbar-path { font-size: 11px; color: var(--slate); }
-    .topbar-path a { color: var(--slate); text-decoration: none; }
-    .online-status { display: flex; align-items: center; gap: 5px; font-size: 10px; color: var(--slate); }
-    .online-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--green); animation: pulse-green 2s ease-in-out infinite; }
-
-    /* ── Page content ── */
-    .page-content { padding: 28px 28px 60px; flex: 1; display: flex; flex-direction: column; }
-
-    /* ── Page header ── */
-    .page-header {
-      margin-bottom: 24px;
-      opacity: 0; animation: slide-up 0.5s 0.15s ease forwards;
-    }
-    .page-header-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 6px; }
-    .page-title {
-      font-family: var(--font-display);
-      font-size: clamp(22px, 3vw, 32px);
-      font-weight: 800; letter-spacing: -1px;
-      background: linear-gradient(90deg, #22D3EE 0%, #8B5CF6 60%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-    }
-    .page-sub { font-size: 12px; color: var(--muted); }
-
-    /* ── Action bar ── */
-    .action-bar {
-      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-      margin-bottom: 20px;
-      opacity: 0; animation: slide-up 0.5s 0.25s ease forwards;
-    }
-    .btn {
-      display: inline-flex; align-items: center; gap: 7px;
-      padding: 8px 16px; border-radius: var(--radius-sm);
-      font-family: var(--font-mono); font-size: 11px;
-      cursor: pointer; text-decoration: none;
-      border: 0.5px solid; transition: all var(--transition);
-      letter-spacing: 0.3px;
-    }
-    .btn-primary {
-      background: rgba(34,211,238,0.1); border-color: rgba(34,211,238,0.35);
-      color: var(--cyan);
-    }
-    .btn-primary:hover { background: rgba(34,211,238,0.18); border-color: var(--cyan); }
-    .btn-ghost {
-      background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.1);
-      color: var(--muted);
-    }
-    .btn-ghost:hover { background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.2); color: var(--soft); }
-    .btn:disabled { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
-
-    /* ── PDF Viewer ── */
-    .pdf-wrapper {
-      flex: 1;
-      border: 0.5px solid var(--border);
-      border-radius: var(--radius-md);
-      overflow: hidden;
-      position: relative;
-      opacity: 0; animation: slide-up 0.55s 0.35s ease forwards;
-      display: flex;
-      flex-direction: column;
-    }
-    .pdf-wrapper::before {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0; height: 1.5px;
-      background: linear-gradient(90deg, transparent, var(--cyan), var(--purple), transparent);
-      z-index: 2; pointer-events: none;
-    }
-
-    /* Toolbar inside viewer */
-    .pdf-toolbar {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 8px 14px;
-      background: rgba(13,17,23,0.95);
-      border-bottom: 0.5px solid var(--border);
-      gap: 12px; flex-shrink: 0; flex-wrap: wrap;
-      position: sticky; top: 0; z-index: 1;
-    }
-    .pdf-toolbar-left { display: flex; align-items: center; gap: 6px; }
-    .pdf-toolbar-center { display: flex; align-items: center; gap: 8px; }
-    .pdf-toolbar-right { display: flex; align-items: center; gap: 6px; }
-
-    .pdf-btn {
-      display: inline-flex; align-items: center; justify-content: center;
-      width: 28px; height: 28px;
-      background: rgba(255,255,255,0.04);
-      border: 0.5px solid rgba(255,255,255,0.09);
-      border-radius: 4px;
-      color: var(--muted); cursor: pointer;
-      transition: all var(--transition);
-      font-size: 11px; font-family: var(--font-mono);
-    }
-    .pdf-btn:hover:not(:disabled) {
-      background: rgba(34,211,238,0.08);
-      border-color: rgba(34,211,238,0.3);
-      color: var(--cyan);
-    }
-    .pdf-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-
-    .pdf-page-indicator {
-      font-size: 11px; color: var(--muted);
-      display: flex; align-items: center; gap: 4px;
-    }
-    .pdf-page-num { color: var(--cyan); font-weight: 500; min-width: 16px; text-align: center; }
-    .pdf-zoom-label {
-      font-size: 10px; color: var(--slate);
-      min-width: 38px; text-align: center;
-    }
-
-    /* Canvas area */
-    .pdf-canvas-area {
-      flex: 1;
-      overflow-y: auto;
-      overflow-x: auto;
-      background: #111418;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 24px 16px;
-      gap: 16px;
-    }
-
-    .pdf-page-wrap {
-      position: relative;
-      box-shadow: 0 4px 32px rgba(0,0,0,0.5);
-      border-radius: 4px;
-      overflow: hidden;
-      line-height: 0;
-    }
-    .pdf-page-wrap canvas { display: block; }
-
-    /* Loading state */
-    .pdf-loading {
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      gap: 14px; padding: 64px 24px;
-      flex: 1;
-    }
-    .pdf-loading-bar {
-      width: 180px; height: 2px;
-      background: rgba(255,255,255,0.06);
-      border-radius: 2px; overflow: hidden;
-    }
-    .pdf-loading-bar-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--cyan), var(--purple));
-      animation: loading-bar 1.4s ease-in-out infinite;
-      border-radius: 2px;
-    }
-    .pdf-loading-text { font-size: 11px; color: var(--slate); letter-spacing: 1px; }
-
-    /* Error state */
-    .pdf-error {
-      display: none; flex-direction: column;
-      align-items: center; justify-content: center;
-      gap: 14px; padding: 64px 24px; text-align: center;
-      flex: 1;
-    }
-    .pdf-error-icon { font-size: 32px; opacity: 0.3; }
-    .pdf-error p { font-size: 12px; color: var(--muted); max-width: 320px; line-height: 1.8; }
-
-    /* ── Light mode ── */
-    [data-theme="light"] {
-      --bg: #f4f6f9; --surface: #ffffff; --border: rgba(0,0,0,0.08);
-      --muted: #6b7280; --slate: #9ca3af; --soft: #1a202c;
-      --cyan: #0891b2; --purple: #7c3aed; --green: #059669; --amber: #d97706;
-    }
-    [data-theme="light"] body { background: var(--bg); color: var(--soft); }
-    [data-theme="light"] .grid-bg {
-      background-image:
-        linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
-    }
-    [data-theme="light"] .orb { opacity: 0.05; }
-    [data-theme="light"] .side-panel { background: rgba(244,246,249,0.97); }
-    [data-theme="light"] .topbar { background: rgba(244,246,249,0.85); }
-    [data-theme="light"] .pdf-canvas-area { background: #e8eaed; }
-    [data-theme="light"] .pdf-toolbar { background: rgba(244,246,249,0.98); }
-
-    @keyframes slide-up {
-      from { opacity: 0; transform: translateY(16px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes pulse-green {
-      0%,100% { box-shadow: 0 0 0 0 rgba(16,185,129,0.5); }
-      50%      { box-shadow: 0 0 0 5px rgba(16,185,129,0); }
-    }
-    @keyframes loading-bar {
-      0%   { transform: translateX(-100%); }
-      50%  { transform: translateX(0); }
-      100% { transform: translateX(100%); }
-    }
-
-    @media (max-width: 768px) {
-      .layout { grid-template-columns: 1fr; }
-      .page-content { padding: 20px 16px 48px; }
-      .pdf-canvas-area { padding: 12px 8px; }
-    }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
-<body>
+<body data-page="resume">
   <div class="grid-bg" aria-hidden="true"></div>
-  <div class="orb orb1" aria-hidden="true"></div>
-  <div class="orb orb2" aria-hidden="true"></div>
 
   <div class="layout">
+
     <div id="sidebar-root"></div>
 
     <div class="main-col">
@@ -378,7 +30,7 @@
             <div class="dot dot-g"></div>
           </div>
           <span class="topbar-path">
-            <a href="../">~/portfolio</a> / resume
+            <a href="../index.html">~/portfolio</a> / resume
           </span>
         </div>
         <div class="topbar-right">
@@ -388,337 +40,334 @@
         </div>
       </header>
 
-      <div class="page-content">
+      <div class="page-heading">
+        <div class="page-heading-label">resume.pdf</div>
+        <h1>Resume</h1>
+        <p>Last updated August 2026 · Rendered inline via PDF.js</p>
+      </div>
 
-        <div class="page-header">
-          <div class="page-header-top">
-            <h1 class="page-title">Resume</h1>
+      <div class="detail-links">
+        <a class="btn btn-primary" href="../assets/resume.pdf" download="Sri_Varshith_Resume.pdf">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Download PDF
+        </a>
+        <a class="btn btn-ghost" href="../assets/resume.pdf" target="_blank" rel="noopener">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
+            <polyline points="15 3 21 3 21 9"/>
+            <line x1="10" y1="14" x2="21" y2="3"/>
+          </svg>
+          Open in new tab
+        </a>
+      </div>
+
+      <div class="pdf-wrapper" id="pdf-wrapper">
+
+        <!-- Toolbar -->
+        <div class="pdf-toolbar" id="pdf-toolbar" hidden>
+          <div class="pdf-toolbar-left">
+            <button class="pdf-btn" id="btn-zoom-out" type="button" title="Zoom out" aria-label="Zoom out">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                <line x1="8" y1="11" x2="14" y2="11"/>
+              </svg>
+            </button>
+            <span class="pdf-zoom-label" id="zoom-label">100%</span>
+            <button class="pdf-btn" id="btn-zoom-in" type="button" title="Zoom in" aria-label="Zoom in">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                <line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/>
+              </svg>
+            </button>
+            <button class="pdf-btn wide" id="btn-fit" type="button" title="Fit to width">Fit</button>
           </div>
-          <p class="page-sub">Last updated June 2025 · Rendered inline via PDF.js</p>
+
+          <div class="pdf-toolbar-center">
+            <button class="pdf-btn" id="btn-prev" type="button" title="Previous page" aria-label="Previous page" disabled>
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="15 18 9 12 15 6"/>
+              </svg>
+            </button>
+            <span class="pdf-page-indicator">
+              <span class="pdf-page-num" id="page-num">1</span>
+              <span style="color: var(--text-dim);">/</span>
+              <span class="pdf-page-total" id="page-total">—</span>
+            </span>
+            <button class="pdf-btn" id="btn-next" type="button" title="Next page" aria-label="Next page" disabled>
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="9 18 15 12 9 6"/>
+              </svg>
+            </button>
+          </div>
+
+          <div class="pdf-toolbar-right">
+            <button class="pdf-btn wide" id="btn-all-pages" type="button"
+                    title="Toggle between single-page and all-pages view" aria-pressed="false">All pages</button>
+          </div>
         </div>
 
-        <div class="action-bar">
-          <a class="btn btn-primary" href="../assets/resume.pdf" download="Sri_Varshith_Resume.pdf">
+        <!-- Loading -->
+        <div class="pdf-loading" id="pdf-loading">
+          <div class="pdf-loading-bar"><div class="pdf-loading-bar-fill"></div></div>
+          <span class="pdf-loading-text">rendering pdf...</span>
+        </div>
+
+        <!-- Canvas area -->
+        <div class="pdf-canvas-area" id="pdf-canvas-area" hidden></div>
+
+        <!-- file:// fallback -->
+        <div class="pdf-fallback" id="pdf-local-fallback">
+          <div class="pdf-fallback-icon" aria-hidden="true">🗂️</div>
+          <p>
+            Running locally? PDF.js can't fetch files over <code>file://</code> because of browser
+            security. Pick <code>resume.pdf</code> below to render it, or serve the site over HTTP
+            and it loads automatically.
+          </p>
+          <label class="btn btn-primary" style="cursor: pointer;">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
               <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
               <polyline points="7 10 12 15 17 10"/>
               <line x1="12" y1="15" x2="12" y2="3"/>
             </svg>
-            Download PDF
-          </a>
-          <a class="btn btn-ghost" href="../assets/resume.pdf" target="_blank" rel="noopener">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
-              <polyline points="15 3 21 3 21 9"/>
-              <line x1="10" y1="14" x2="21" y2="3"/>
-            </svg>
-            Open in new tab
-          </a>
+            Load resume.pdf
+            <input type="file" accept="application/pdf" id="local-pdf-input" style="display: none;" />
+          </label>
         </div>
 
-        <div class="pdf-wrapper" id="pdf-wrapper">
-
-          <!-- Toolbar -->
-          <div class="pdf-toolbar" id="pdf-toolbar" style="display:none;">
-            <div class="pdf-toolbar-left">
-              <!-- Zoom out -->
-              <button class="pdf-btn" id="btn-zoom-out" title="Zoom out">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                  <line x1="8" y1="11" x2="14" y2="11"/>
-                </svg>
-              </button>
-              <span class="pdf-zoom-label" id="zoom-label">100%</span>
-              <!-- Zoom in -->
-              <button class="pdf-btn" id="btn-zoom-in" title="Zoom in">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                  <line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/>
-                </svg>
-              </button>
-              <!-- Fit width -->
-              <button class="pdf-btn" id="btn-fit" title="Fit to width" style="width:auto;padding:0 8px;font-size:10px;letter-spacing:.5px;">
-                Fit
-              </button>
-            </div>
-
-            <div class="pdf-toolbar-center">
-              <!-- Prev page -->
-              <button class="pdf-btn" id="btn-prev" title="Previous page" disabled>
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                  <polyline points="15 18 9 12 15 6"/>
-                </svg>
-              </button>
-              <span class="pdf-page-indicator">
-                <span class="pdf-page-num" id="page-num">1</span>
-                <span style="color:var(--slate)">/</span>
-                <span class="pdf-page-num" id="page-total" style="color:var(--muted)">—</span>
-              </span>
-              <!-- Next page -->
-              <button class="pdf-btn" id="btn-next" title="Next page" disabled>
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                  <polyline points="9 18 15 12 9 6"/>
-                </svg>
-              </button>
-            </div>
-
-            <div class="pdf-toolbar-right">
-              <!-- Render all pages toggle -->
-              <button class="pdf-btn" id="btn-all-pages" title="Toggle: render all pages / single page"
-                style="width:auto;padding:0 8px;font-size:10px;letter-spacing:.5px;">All pages</button>
-            </div>
-          </div>
-
-          <!-- Loading -->
-          <div class="pdf-loading" id="pdf-loading">
-            <div class="pdf-loading-bar"><div class="pdf-loading-bar-fill"></div></div>
-            <span class="pdf-loading-text">rendering pdf...</span>
-          </div>
-
-          <!-- Canvas area -->
-          <div class="pdf-canvas-area" id="pdf-canvas-area" style="display:none;"></div>
-
-          <!-- Local file fallback (shown when running over file://) -->
-          <div class="pdf-error" id="pdf-local-fallback" style="display:none;">
-            <div class="pdf-error-icon">🗂️</div>
-            <p style="margin-bottom:4px;">Running locally? PDF.js can't fetch files over <code style="color:var(--cyan);font-size:11px;">file://</code> due to browser security.<br>Pick your <code style="color:var(--amber);font-size:11px;">resume.pdf</code> below to render it, or deploy the site to see it load automatically.</p>
-            <label class="btn btn-primary" style="cursor:pointer;margin-top:6px;">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
-                <polyline points="7 10 12 15 17 10"/>
-                <line x1="12" y1="15" x2="12" y2="3"/>
-              </svg>
-              Load resume.pdf
-              <input type="file" accept="application/pdf" id="local-pdf-input" style="display:none;" />
-            </label>
-          </div>
-
-          <!-- Error -->
-          <div class="pdf-error" id="pdf-error" style="display:none;">
-            <div class="pdf-error-icon">📄</div>
-            <p>Couldn't render the PDF. Use the buttons above to download or open it directly.</p>
-            <a class="btn btn-primary" href="../assets/resume.pdf" download="Sri_Varshith_Resume.pdf">Download Resume</a>
-          </div>
-
+        <!-- Error -->
+        <div class="pdf-fallback" id="pdf-error">
+          <div class="pdf-fallback-icon" aria-hidden="true">📄</div>
+          <p>Couldn't render the PDF. Use the buttons above to download or open it directly.</p>
+          <a class="btn btn-primary" href="../assets/resume.pdf" download="Sri_Varshith_Resume.pdf">Download resume</a>
         </div>
+
       </div>
+
     </div>
   </div>
 
-  <script src="../components/sidebar_pages.js"></script>
+  <script src="../components/sidebar.js"></script>
   <script>
-    // ── PDF.js setup ──────────────────────────────────────────────
-    pdfjsLib.GlobalWorkerOptions.workerSrc =
-      'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    (function () {
+      'use strict';
 
-    const PDF_URL      = '../assets/resume.pdf';
-    const ZOOM_STEP    = 0.2;
-    const ZOOM_MIN     = 0.4;
-    const ZOOM_MAX     = 3.0;
+      // If the CDN copy of PDF.js didn't load, fall straight through to the
+      // download links rather than leaving the spinner running forever.
+      if (typeof pdfjsLib === 'undefined') {
+        var l = document.getElementById('pdf-loading');
+        var e = document.getElementById('pdf-error');
+        l.hidden = true; l.style.display = 'none';
+        e.hidden = false; e.style.display = 'flex';
+        return;
+      }
 
-    let pdfDoc         = null;
-    let currentPage    = 1;
-    let scale          = 1.0;
-    let fitScale       = 1.0;
-    let renderAllPages = false;
-    let renderTask     = null;
+      pdfjsLib.GlobalWorkerOptions.workerSrc =
+        'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-    const loading      = document.getElementById('pdf-loading');
-    const canvasArea   = document.getElementById('pdf-canvas-area');
-    const toolbar      = document.getElementById('pdf-toolbar');
-    const errDiv       = document.getElementById('pdf-error');
-    const localFallback = document.getElementById('pdf-local-fallback');
-    const localInput   = document.getElementById('local-pdf-input');
-    const pageNum      = document.getElementById('page-num');
-    const pageTotal  = document.getElementById('page-total');
-    const zoomLabel  = document.getElementById('zoom-label');
-    const btnPrev    = document.getElementById('btn-prev');
-    const btnNext    = document.getElementById('btn-next');
-    const btnZoomIn  = document.getElementById('btn-zoom-in');
-    const btnZoomOut = document.getElementById('btn-zoom-out');
-    const btnFit     = document.getElementById('btn-fit');
-    const btnAll     = document.getElementById('btn-all-pages');
+      var PDF_URL   = '../assets/resume.pdf';
+      var ZOOM_STEP = 0.2;
+      var ZOOM_MIN  = 0.4;
+      var ZOOM_MAX  = 3.0;
 
-    // ── Helpers ───────────────────────────────────────────────────
-    function calcFitScale(page) {
-      const vp = page.getViewport({ scale: 1 });
-      // canvasArea may be display:none so clientWidth is 0 — fall back up the DOM
-      const ref = canvasArea.clientWidth ||
+      var pdfDoc = null;
+      var currentPage = 1;
+      var scale = 1.0;
+      var fitScale = 1.0;
+      var renderAllPages = false;
+      var renderTask = null;
+
+      var loading       = document.getElementById('pdf-loading');
+      var canvasArea    = document.getElementById('pdf-canvas-area');
+      var toolbar       = document.getElementById('pdf-toolbar');
+      var errDiv        = document.getElementById('pdf-error');
+      var localFallback = document.getElementById('pdf-local-fallback');
+      var localInput    = document.getElementById('local-pdf-input');
+      var pageNumEl     = document.getElementById('page-num');
+      var pageTotal     = document.getElementById('page-total');
+      var zoomLabel     = document.getElementById('zoom-label');
+      var btnPrev       = document.getElementById('btn-prev');
+      var btnNext       = document.getElementById('btn-next');
+      var btnZoomIn     = document.getElementById('btn-zoom-in');
+      var btnZoomOut    = document.getElementById('btn-zoom-out');
+      var btnFit        = document.getElementById('btn-fit');
+      var btnAll        = document.getElementById('btn-all-pages');
+
+      function show(el)  { el.hidden = false; el.style.display = ''; }
+      function hide(el)  { el.hidden = true;  el.style.display = 'none'; }
+
+      function calcFitScale(page) {
+        var vp = page.getViewport({ scale: 1 });
+        // canvasArea may still be hidden, so fall back up the DOM for a width.
+        var ref = canvasArea.clientWidth ||
                   document.getElementById('pdf-wrapper').clientWidth ||
-                  document.querySelector('.page-content').clientWidth;
-      const containerW = Math.max(ref, 400) - 32;
-      return Math.max(0.5, Math.min(1.5, containerW / vp.width));
-    }
+                  document.querySelector('.main-col').clientWidth;
+        var containerW = Math.max(ref, 400) - 32;
+        return Math.max(0.5, Math.min(1.5, containerW / vp.width));
+      }
 
-    function updateUI() {
-      if (!pdfDoc) return;
-      pageNum.textContent  = currentPage;
-      pageTotal.textContent = pdfDoc.numPages;
-      zoomLabel.textContent = Math.round(scale * 100) + '%';
-      btnPrev.disabled = currentPage <= 1 || renderAllPages;
-      btnNext.disabled = currentPage >= pdfDoc.numPages || renderAllPages;
-      btnZoomOut.disabled = scale <= ZOOM_MIN;
-      btnZoomIn.disabled  = scale >= ZOOM_MAX;
-    }
+      function updateUI() {
+        if (!pdfDoc) return;
+        pageNumEl.textContent = currentPage;
+        pageTotal.textContent = pdfDoc.numPages;
+        zoomLabel.textContent = Math.round(scale * 100) + '%';
+        btnPrev.disabled    = currentPage <= 1 || renderAllPages;
+        btnNext.disabled    = currentPage >= pdfDoc.numPages || renderAllPages;
+        btnZoomOut.disabled = scale <= ZOOM_MIN;
+        btnZoomIn.disabled  = scale >= ZOOM_MAX;
+      }
 
-    // ── Render single page into a canvas ──────────────────────────
-    async function renderPage(pageNum, canvas, s) {
-      const page = await pdfDoc.getPage(pageNum);
-      const vp   = page.getViewport({ scale: s });
-      const ctx  = canvas.getContext('2d');
-      const dpr  = window.devicePixelRatio || 1;
+      function renderPage(num, canvas, s) {
+        return pdfDoc.getPage(num).then(function (page) {
+          var vp  = page.getViewport({ scale: s });
+          var ctx = canvas.getContext('2d');
+          var dpr = window.devicePixelRatio || 1;
 
-      canvas.width  = Math.floor(vp.width  * dpr);
-      canvas.height = Math.floor(vp.height * dpr);
-      canvas.style.width  = Math.floor(vp.width)  + 'px';
-      canvas.style.height = Math.floor(vp.height) + 'px';
+          canvas.width  = Math.floor(vp.width  * dpr);
+          canvas.height = Math.floor(vp.height * dpr);
+          canvas.style.width  = Math.floor(vp.width)  + 'px';
+          canvas.style.height = Math.floor(vp.height) + 'px';
+          ctx.scale(dpr, dpr);
 
-      ctx.scale(dpr, dpr);
+          if (renderTask) { try { renderTask.cancel(); } catch (e) { /* superseded */ } }
+          renderTask = page.render({ canvasContext: ctx, viewport: vp });
+          return renderTask.promise.then(function () { renderTask = null; });
+        });
+      }
 
-      if (renderTask) { try { renderTask.cancel(); } catch(_){} }
-      renderTask = page.render({ canvasContext: ctx, viewport: vp });
-      await renderTask.promise;
-      renderTask = null;
-      return page;
-    }
+      function buildView() {
+        canvasArea.innerHTML = '';
 
-    // ── Build / refresh the canvas area ──────────────────────────
-    async function buildView() {
-      canvasArea.innerHTML = '';
-
-      if (renderAllPages) {
-        // Render every page stacked
-        for (let i = 1; i <= pdfDoc.numPages; i++) {
-          const wrap   = document.createElement('div');
+        function addPage(num) {
+          var wrap = document.createElement('div');
           wrap.className = 'pdf-page-wrap';
-          const canvas = document.createElement('canvas');
+          var canvas = document.createElement('canvas');
           wrap.appendChild(canvas);
           canvasArea.appendChild(wrap);
-          await renderPage(i, canvas, scale);
+          return renderPage(num, canvas, scale);
         }
-      } else {
-        // Render only current page
-        const wrap   = document.createElement('div');
-        wrap.className = 'pdf-page-wrap';
-        const canvas = document.createElement('canvas');
-        wrap.appendChild(canvas);
-        canvasArea.appendChild(wrap);
-        await renderPage(currentPage, canvas, scale);
-      }
 
-      updateUI();
-    }
-
-    // ── Load PDF ──────────────────────────────────────────────────
-    async function loadFromSource(source) {
-      // source: string URL or ArrayBuffer
-      try {
-        loading.style.display       = 'flex';
-        localFallback.style.display = 'none';
-        errDiv.style.display        = 'none';
-
-        const loadingTask = pdfjsLib.getDocument(source);
-        pdfDoc = await loadingTask.promise;
-
-        const page1 = await pdfDoc.getPage(1);
-
-        loading.style.display    = 'none';
-        toolbar.style.display    = 'flex';
-        canvasArea.style.display = 'flex';
-
-        // Wait one frame so the browser performs layout and clientWidth is real
-        await new Promise(r => requestAnimationFrame(r));
-        fitScale = calcFitScale(page1);
-        scale    = fitScale;
-
-        await buildView();
-      } catch (err) {
-        console.error('PDF load error:', err);
-        loading.style.display = 'none';
-        // If running over file:// or CORS blocked, show the local picker
-        const isLocal = location.protocol === 'file:' ||
-                        err?.message?.includes('NetworkError') ||
-                        err?.name === 'UnknownErrorException';
-        if (isLocal && typeof source === 'string') {
-          localFallback.style.display = 'flex';
+        var chain = Promise.resolve();
+        if (renderAllPages) {
+          for (var i = 1; i <= pdfDoc.numPages; i++) {
+            chain = chain.then(addPage.bind(null, i));
+          }
         } else {
-          errDiv.style.display = 'flex';
+          chain = chain.then(addPage.bind(null, currentPage));
         }
+        return chain.then(updateUI);
       }
-    }
 
-    async function loadPDF() {
-      // Show loading immediately, then try fetching from URL
-      await loadFromSource(PDF_URL);
-    }
+      function loadFromSource(source) {
+        show(loading);
+        hide(localFallback);
+        hide(errDiv);
 
-    // ── Local file picker (file:// fallback) ──────────────────────
-    localInput.addEventListener('change', async (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-      const arrayBuffer = await file.arrayBuffer();
-      currentPage    = 1;
-      renderAllPages = false;
-      btnAll.style.color       = '';
-      btnAll.style.borderColor = '';
-      await loadFromSource({ data: arrayBuffer });
-    });
+        return pdfjsLib.getDocument(source).promise.then(function (doc) {
+          pdfDoc = doc;
+          return doc.getPage(1);
+        }).then(function (page1) {
+          hide(loading);
+          show(toolbar);
+          toolbar.style.display = 'flex';
+          show(canvasArea);
+          canvasArea.style.display = 'flex';
 
-    // ── Controls ──────────────────────────────────────────────────
-    btnPrev.addEventListener('click', async () => {
-      if (currentPage > 1) { currentPage--; await buildView(); }
-    });
-    btnNext.addEventListener('click', async () => {
-      if (currentPage < pdfDoc.numPages) { currentPage++; await buildView(); }
-    });
-    btnZoomIn.addEventListener('click', async () => {
-      scale = Math.min(ZOOM_MAX, +(scale + ZOOM_STEP).toFixed(1));
-      await buildView();
-    });
-    btnZoomOut.addEventListener('click', async () => {
-      scale = Math.max(ZOOM_MIN, +(scale - ZOOM_STEP).toFixed(1));
-      await buildView();
-    });
-    btnFit.addEventListener('click', async () => {
-      scale = fitScale;
-      await buildView();
-    });
-    btnAll.addEventListener('click', async () => {
-      renderAllPages = !renderAllPages;
-      btnAll.style.color       = renderAllPages ? 'var(--cyan)' : '';
-      btnAll.style.borderColor = renderAllPages ? 'rgba(34,211,238,0.35)' : '';
-      currentPage = 1;
-      await buildView();
-    });
-
-    // Keyboard shortcuts
-    document.addEventListener('keydown', async (e) => {
-      if (!pdfDoc || renderAllPages) return;
-      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-        if (currentPage < pdfDoc.numPages) { currentPage++; await buildView(); }
-      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-        if (currentPage > 1) { currentPage--; await buildView(); }
+          // One frame so layout settles and clientWidth is real.
+          return new Promise(function (r) { requestAnimationFrame(r); })
+            .then(function () {
+              fitScale = calcFitScale(page1);
+              scale = fitScale;
+              return buildView();
+            });
+        }).catch(function (err) {
+          console.error('PDF load error:', err);
+          hide(loading);
+          var isLocal = location.protocol === 'file:' ||
+                        (err && err.message && err.message.indexOf('NetworkError') !== -1) ||
+                        (err && err.name === 'UnknownErrorException');
+          if (isLocal && typeof source === 'string') {
+            show(localFallback);
+            localFallback.style.display = 'flex';
+          } else {
+            show(errDiv);
+            errDiv.style.display = 'flex';
+          }
+        });
       }
-    });
 
-    // Recalculate fit on resize
-    let resizeTimer;
-    window.addEventListener('resize', () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(async () => {
-        if (!pdfDoc) return;
-        const page1 = await pdfDoc.getPage(1);
-        fitScale = calcFitScale(page1);
-        // Only auto-refit if we're close to the fit scale
-        if (Math.abs(scale - fitScale) < 0.15) {
-          scale = fitScale;
-          await buildView();
+      localInput.addEventListener('change', function (e) {
+        var file = e.target.files[0];
+        if (!file) return;
+        file.arrayBuffer().then(function (buf) {
+          currentPage = 1;
+          renderAllPages = false;
+          btnAll.classList.remove('on');
+          btnAll.setAttribute('aria-pressed', 'false');
+          loadFromSource({ data: buf });
+        });
+      });
+
+      btnPrev.addEventListener('click', function () {
+        if (currentPage > 1) { currentPage--; buildView(); }
+      });
+      btnNext.addEventListener('click', function () {
+        if (pdfDoc && currentPage < pdfDoc.numPages) { currentPage++; buildView(); }
+      });
+      btnZoomIn.addEventListener('click', function () {
+        scale = Math.min(ZOOM_MAX, +(scale + ZOOM_STEP).toFixed(1));
+        buildView();
+      });
+      btnZoomOut.addEventListener('click', function () {
+        scale = Math.max(ZOOM_MIN, +(scale - ZOOM_STEP).toFixed(1));
+        buildView();
+      });
+      btnFit.addEventListener('click', function () {
+        scale = fitScale;
+        buildView();
+      });
+      btnAll.addEventListener('click', function () {
+        renderAllPages = !renderAllPages;
+        btnAll.classList.toggle('on', renderAllPages);
+        btnAll.setAttribute('aria-pressed', String(renderAllPages));
+        currentPage = 1;
+        buildView();
+      });
+
+      document.addEventListener('keydown', function (e) {
+        if (!pdfDoc || renderAllPages) return;
+        // Don't hijack arrows while the user is typing somewhere.
+        var tag = (e.target.tagName || '').toLowerCase();
+        if (tag === 'input' || tag === 'textarea') return;
+
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+          if (currentPage < pdfDoc.numPages) { currentPage++; buildView(); }
+        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+          if (currentPage > 1) { currentPage--; buildView(); }
         }
-      }, 250);
-    });
+      });
 
-    // Boot
-    loadPDF();
+      var resizeTimer;
+      window.addEventListener('resize', function () {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function () {
+          if (!pdfDoc) return;
+          pdfDoc.getPage(1).then(function (page1) {
+            fitScale = calcFitScale(page1);
+            // Only auto-refit if the user hasn't deliberately zoomed away.
+            if (Math.abs(scale - fitScale) < 0.15) {
+              scale = fitScale;
+              buildView();
+            }
+          });
+        }, 250);
+      });
+
+      loadFromSource(PDF_URL);
+    })();
   </script>
 </body>
 </html>

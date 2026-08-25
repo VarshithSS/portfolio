@@ -1,360 +1,24 @@
+<!-- pages/projects.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Projects — Sri Varshith</title>
-  <meta name="description" content="Projects by Singampalli Sri Varshith" />
+  <meta name="description" content="ML systems, retrieval, distributed computing and backend projects by Singampalli Sri Varshith." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-    :root {
-      --bg:       #0B0F19;
-      --bg2:      #111827;
-      --bg3:      #0F172A;
-      --cyan:     #22D3EE;
-      --purple:   #8B5CF6;
-      --green:    #10B981;
-      --amber:    #F59E0B;
-      --slate:    #475569;
-      --muted:    #64748B;
-      --soft:     #E5E7EB;
-      --border:   rgba(34, 211, 238, 0.11);
-      --font-mono:    'JetBrains Mono', monospace;
-      --font-display: 'Syne', sans-serif;
-      --radius-sm: 4px;
-      --radius-md: 8px;
-      --transition: 0.2s ease;
-    }
-    /* ── Theme toggle ── */
-.theme-toggle {
-  display: flex; align-items: center; gap: 10px;
-  width: 100%; padding: 9px 12px;
-  background: rgba(255,255,255,0.03);
-  border: 0.5px solid rgba(255,255,255,0.08);
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: 12px;
-  transition: all 0.2s ease;
-  margin-bottom: 16px;
-}
-.theme-toggle:hover {
-  background: rgba(34,211,238,0.06);
-  border-color: rgba(34,211,238,0.2);
-  color: var(--cyan);
-}
-.theme-toggle-icon {
-  display: flex; align-items: center;
-  width: 16px; flex-shrink: 0; opacity: 0.8;
-}
-.theme-toggle-label { flex: 1; text-align: left; }
-.theme-toggle-badge {
-  font-size: 9px; letter-spacing: 1px;
-  text-transform: uppercase;
-  padding: 2px 6px; border-radius: 2px;
-  background: rgba(255,255,255,0.05);
-  border: 0.5px solid rgba(255,255,255,0.08);
-}
-
-/* ── Light mode overrides ── */
-[data-theme="light"] {
-  --bg:      #f4f6f9;
-  --bg2:     #ffffff;
-  --bg3:     #eef1f5;
-  --border:  rgba(0,0,0,0.08);
-  --muted:   #6b7280;
-  --slate:   #9ca3af;
-  --soft:    #1a202c;
-  --cyan:    #0891b2;
-  --purple:  #7c3aed;
-  --green:   #059669;
-  --amber:   #d97706;
-}
-[data-theme="light"] body { background: var(--bg); color: var(--soft); }
-[data-theme="light"] .grid-bg {
-  background-image:
-    linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px);
-  background-size: 44px 44px;
-}
-[data-theme="light"] .orb { opacity: 0.05; }
-[data-theme="light"] .side-panel { background: rgba(244,246,249,0.97); }
-[data-theme="light"] .topbar { background: rgba(255,255,255,0.8); }
-[data-theme="light"] .project-row { background: rgba(255,255,255,0.6); }
-[data-theme="light"] .project-row:hover { background: rgba(8,145,178,0.05); }
-[data-theme="light"] .theme-toggle {
-  background: rgba(0,0,0,0.03);
-  border-color: rgba(0,0,0,0.08);
-}
-
-    html { scroll-behavior: smooth; }
-    body {
-      background: var(--bg);
-      color: var(--soft);
-      font-family: var(--font-mono);
-      overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
-      min-height: 100vh;
-    }
-    a { color: inherit; text-decoration: none; }
-
-    .grid-bg {
-      position: fixed; inset: 0;
-      background-image:
-        linear-gradient(rgba(34,211,238,0.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(34,211,238,0.025) 1px, transparent 1px);
-      background-size: 44px 44px;
-      pointer-events: none; z-index: 0;
-    }
-    .orb { position: fixed; border-radius: 50%; filter: blur(100px); pointer-events: none; z-index: 0; }
-    .orb1 { width: 500px; height: 500px; background: rgba(34,211,238,0.05);  top: -150px; right: -80px; }
-    .orb2 { width: 400px; height: 400px; background: rgba(139,92,246,0.055); bottom: 60px; left: -100px; }
-
-    .layout {
-      position: relative; z-index: 1;
-      display: grid;
-      grid-template-columns: 260px 1fr;
-      min-height: 100vh;
-      align-items: stretch;
-    }
-
-    /* Side panel — styles shared with sidebar.js output */
-    .side-panel {
-      position: sticky; top: 0; height: 100vh;
-      border-right: 0.5px solid var(--border);
-      overflow-y: auto;
-      opacity: 0;
-      animation: slide-up 0.5s 0.1s ease forwards;
-      background: rgba(9, 13, 22, 0.97);
-      backdrop-filter: blur(20px);
-      display: flex; flex-direction: column;
-    }
-    .panel-inner {
-      padding: 28px 18px; flex: 1;
-      display: flex; flex-direction: column;
-      position: relative; overflow: hidden;
-    }
-    .panel-inner::before {
-      content: ''; position: absolute;
-      top: 0; left: 0; right: 0; height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(139,92,246,0.4), transparent);
-    }
-    .panel-brand {
-      display: flex; align-items: center; gap: 10px;
-      margin-bottom: 32px; padding-bottom: 20px;
-      border-bottom: 0.5px solid rgba(255,255,255,0.06);
-    }
-    .panel-brand-dot {
-      width: 8px; height: 8px; border-radius: 50%;
-      background: var(--cyan);
-      animation: pulse-green 2s ease-in-out infinite; flex-shrink: 0;
-    }
-    .panel-brand-name {
-      font-family: var(--font-display); font-size: 13px;
-      font-weight: 700; color: var(--soft); letter-spacing: 0.3px;
-    }
-    .panel-label {
-      font-size: 9px; letter-spacing: 2px;
-      text-transform: uppercase; color: var(--slate);
-      margin-bottom: 8px; padding-left: 2px;
-    }
-    .panel-nav { display: flex; flex-direction: column; gap: 2px; margin-bottom: 24px; }
-    .panel-link {
-      display: flex; align-items: center; gap: 10px;
-      padding: 9px 12px; border-radius: var(--radius-sm);
-      font-size: 13px; color: var(--muted);
-      border: 0.5px solid transparent;
-      transition: all var(--transition);
-    }
-    .panel-link:hover { color: var(--cyan); background: rgba(34,211,238,0.06); border-color: rgba(34,211,238,0.15); }
-    .panel-link.active { color: var(--cyan); background: rgba(34,211,238,0.07); border-color: rgba(34,211,238,0.2); }
-    .panel-link-icon { display: flex; align-items: center; justify-content: center; width: 16px; flex-shrink: 0; color: inherit; opacity: 0.7; }
-    .panel-link:hover .panel-link-icon, .panel-link.active .panel-link-icon { opacity: 1; }
-    .panel-divider { height: 0.5px; background: rgba(255,255,255,0.06); margin: 16px 0; }
-    .panel-status {
-      margin-top: auto; display: flex; align-items: center; gap: 7px;
-      font-size: 9px; color: var(--slate);
-      padding: 16px 2px 0; border-top: 0.5px solid rgba(255,255,255,0.06);
-    }
-    .status-dot {
-      width: 5px; height: 5px; border-radius: 50%; background: var(--green);
-      animation: pulse-green 2s ease-in-out infinite; flex-shrink: 0;
-    }
-
-    /* Main col */
-    .main-col { min-width: 0; padding: 24px 32px 40px; display: flex; flex-direction: column; }
-
-    /* Topbar */
-    .topbar {
-      display: flex; align-items: center; justify-content: space-between;
-      border: 0.5px solid var(--border);
-      background: rgba(17,24,39,0.75);
-      backdrop-filter: blur(14px);
-      border-radius: var(--radius-md);
-      padding: 7px 14px; margin-bottom: 28px;
-      font-size: 11px; color: var(--muted);
-    }
-    .topbar-left { display: flex; align-items: center; gap: 10px; }
-    .dots { display: flex; gap: 6px; align-items: center; }
-    .dot  { width: 8px; height: 8px; border-radius: 50%; }
-    .dot-r { background: #EF4444; } .dot-y { background: #F59E0B; } .dot-g { background: #10B981; }
-    .topbar-path { color: var(--slate); }
-    .online-status { display: flex; align-items: center; gap: 5px; font-size: 10px; }
-    .online-dot {
-      display: inline-block; width: 6px; height: 6px;
-      border-radius: 50%; background: var(--green);
-      animation: pulse-green 2s ease-in-out infinite;
-    }
-
-    /* Page heading */
-    .page-heading {
-      margin-bottom: 28px;
-      opacity: 0; animation: slide-up 0.5s 0.2s ease forwards;
-    }
-    .page-heading-label {
-      font-size: 9px; letter-spacing: 2.5px; text-transform: uppercase;
-      color: var(--cyan); margin-bottom: 8px; display: flex; align-items: center; gap: 8px;
-    }
-    .page-heading-label::after {
-      content: ''; flex: 1; height: 0.5px; background: var(--border);
-    }
-    .page-heading h1 {
-      font-family: var(--font-display);
-      font-size: clamp(22px, 3vw, 34px);
-      font-weight: 800; letter-spacing: -1px;
-      background: linear-gradient(90deg, #22D3EE 0%, #8B5CF6 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .page-heading p {
-      font-size: 12px; color: var(--muted); margin-top: 6px; line-height: 1.7;
-    }
-
-    /* Projects list */
-    .projects-list {
-      display: flex; flex-direction: column; gap: 2px;
-    }
-
-    .project-row {
-      display: grid;
-      grid-template-columns: 28px 1fr auto;
-      align-items: center;
-      gap: 16px;
-      padding: 16px 18px;
-      border: 0.5px solid transparent;
-      border-radius: var(--radius-md);
-      background: rgba(17,24,39,0.4);
-      cursor: pointer;
-      transition: all 0.2s ease;
-      opacity: 0;
-      text-decoration: none;
-      color: inherit;
-      position: relative;
-      overflow: hidden;
-    }
-    .project-row::before {
-      content: '';
-      position: absolute; left: 0; top: 0; bottom: 0;
-      width: 2px;
-      background: var(--cyan);
-      transform: scaleY(0);
-      transition: transform 0.2s ease;
-      transform-origin: bottom;
-    }
-    .project-row:hover::before { transform: scaleY(1); }
-    .project-row:hover {
-      border-color: var(--border);
-      background: rgba(34,211,238,0.04);
-      transform: translateX(3px);
-    }
-
-    .project-row.show { animation: row-in 0.4s ease forwards; }
-
-    @keyframes row-in {
-      from { opacity: 0; transform: translateY(8px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    .project-index {
-      font-size: 10px; color: var(--slate);
-      font-family: var(--font-mono);
-      text-align: center;
-    }
-
-    .project-info { min-width: 0; }
-
-    .project-name {
-      font-family: var(--font-display);
-      font-size: 14px; font-weight: 700;
-      color: var(--soft); letter-spacing: -0.2px;
-      margin-bottom: 4px;
-      display: flex; align-items: center; gap: 8px;
-    }
-
-    .project-tag {
-      font-family: var(--font-mono);
-      font-size: 9px; letter-spacing: 1px;
-      text-transform: uppercase;
-      padding: 2px 7px; border-radius: 3px;
-      border: 0.5px solid;
-    }
-    .tag-ml    { color: var(--cyan);   border-color: rgba(34,211,238,0.3);  background: rgba(34,211,238,0.06); }
-    .tag-agent { color: var(--purple); border-color: rgba(139,92,246,0.3); background: rgba(139,92,246,0.06); }
-    .tag-nlp   { color: var(--green);  border-color: rgba(16,185,129,0.3);  background: rgba(16,185,129,0.06); }
-    .tag-tool  { color: var(--amber);  border-color: rgba(245,158,11,0.3);  background: rgba(245,158,11,0.06); }
-
-    .project-desc {
-      font-size: 11.5px; color: var(--muted);
-      line-height: 1.5; white-space: nowrap;
-      overflow: hidden; text-overflow: ellipsis;
-      max-width: 520px;
-    }
-
-    .project-arrow {
-      font-size: 14px; color: var(--slate);
-      transition: all 0.2s ease;
-      flex-shrink: 0;
-    }
-    .project-row:hover .project-arrow { color: var(--cyan); transform: translateX(4px); }
-
-
-    @keyframes slide-up {
-      from { opacity: 0; transform: translateY(8px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes pulse-green {
-      0%,100% { box-shadow: 0 0 0 0 rgba(16,185,129,0.5); }
-      50%      { box-shadow: 0 0 0 5px rgba(16,185,129,0); }
-    }
-
-    @media (max-width: 680px) {
-      .layout { grid-template-columns: 1fr; }
-      .side-panel { position: static; height: auto; border-right: none; border-bottom: 0.5px solid var(--border); }
-      .panel-nav { flex-direction: row; flex-wrap: wrap; gap: 4px; }
-      .panel-link { padding: 5px 10px; font-size: 11px; }
-      .main-col { padding: 16px 18px 32px; }
-      .project-row { grid-template-columns: 24px 1fr 16px; gap: 10px; }
-      .project-desc { max-width: 200px; }
-      .stats-bar { gap: 14px; flex-wrap: wrap; }
-    }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
 </head>
-<body>
+<body data-page="projects">
   <div class="grid-bg" aria-hidden="true"></div>
-  <div class="orb orb1" aria-hidden="true"></div>
-  <div class="orb orb2" aria-hidden="true"></div>
 
   <div class="layout">
 
-    <!-- Sidebar injected here automatically by sidebar.js -->
     <div id="sidebar-root"></div>
 
-    <!-- MAIN COLUMN -->
     <div class="main-col">
 
       <header class="topbar">
@@ -364,7 +28,9 @@
             <div class="dot dot-y"></div>
             <div class="dot dot-g"></div>
           </div>
-          <span class="topbar-path">~/portfolio/projects</span>
+          <span class="topbar-path">
+            <a href="../index.html">~/portfolio</a> / projects
+          </span>
         </div>
         <div class="topbar-right">
           <span class="online-status">
@@ -375,78 +41,85 @@
 
       <div class="page-heading">
         <div class="page-heading-label">projects.index</div>
-        <h1>Things I've Built</h1>
-        <p>A collection of ML systems, agents, and tools — each a different experiment in what's possible.</p>
+        <div class="page-heading-top">
+          <h1>Things I've Built</h1>
+          <span class="count-pill" id="project-count">— projects</span>
+        </div>
+        <p>
+          Retrieval systems, segmentation models, distributed solvers and backends —
+          each one an experiment in getting something to be provably right rather than
+          approximately right.
+        </p>
       </div>
 
-      <div class="projects-list" id="projects-list" role="list"></div>
+      <div class="projects-list" id="projects-list"></div>
 
     </div>
   </div>
 
-  <!-- Load sidebar component (adjust path relative to this file's location) -->
-  <script src="../components/sidebar_pages.js"></script>
-
+  <script src="../components/sidebar.js"></script>
+  <script src="../components/projects-data.js"></script>
   <script>
-    const PROJECTS = [
-      {
-        id: 'browser-agent',
-        name: 'Browser Agent',
-        tag: 'agent',
-        tagLabel: 'Agent',
-        desc: 'Autonomous LLM-powered agent that navigates, clicks, and fills the web without human input.',
-      },
-      {
-        id: 'dual-discriminator-GAN',
-        name: 'Dual-Discriminator GAN with self attention',
-        tag: 'ml',
-        tagLabel: 'ML',
-        desc: 'Generative adversarial network with separate discriminators for local and global image features, enhanced by self-attention layers.',
-      },
-      {
-        id: 'disaster-damage-analysis',
-        name: 'Disaster Damage Analysis',
-        tag: 'ml',
-        tagLabel: 'ML',
-        desc: 'Machine learning model for analyzing satellite imagery to assess damage from natural disasters.',
-      },
-      {
-        id: 'email-spam-detection',
-        name: 'Email Spam Detection',
-        tag: 'ml',
-        tagLabel: 'ML',
-        desc: 'Machine learning model for identifying and filtering spam emails based on content.',
-      },
-    ];
+    (function () {
+      'use strict';
 
-    const TAG_CLASS = { ml: 'tag-ml', agent: 'tag-agent', nlp: 'tag-nlp', tool: 'tag-tool' };
+      var list  = document.getElementById('projects-list');
+      var count = document.getElementById('project-count');
+      var projects = window.PROJECTS || [];
+      var tagClass = window.PROJECT_TAG_CLASS || {};
 
-    function renderProjects() {
-      const list = document.getElementById('projects-list');
-      list.innerHTML = '';
+      count.textContent = projects.length + ' projects';
 
-      PROJECTS.forEach((proj, i) => {
-        const a = document.createElement('a');
+      projects.forEach(function (proj, i) {
+        var a = document.createElement('a');
         a.className = 'project-row';
-        a.href = `projects_repo/${proj.id}.html`;
-        a.setAttribute('role', 'listitem');
-        a.innerHTML = `
-          <span class="project-index">${String(i + 1).padStart(2, '0')}</span>
-          <div class="project-info">
-            <div class="project-name">
-              ${proj.name}
-              <span class="project-tag ${TAG_CLASS[proj.tag]}">${proj.tagLabel}</span>
-            </div>
-            <div class="project-desc">${proj.desc}</div>
-          </div>
-          <span class="project-arrow">→</span>
-        `;
-        list.appendChild(a);
-        setTimeout(() => a.classList.add('show'), i * 60);
-      });
-    }
+        a.href = 'project.html?id=' + encodeURIComponent(proj.id);
 
-    renderProjects();
+        var index = document.createElement('span');
+        index.className = 'project-index';
+        index.textContent = String(i + 1).padStart(2, '0');
+
+        var info = document.createElement('div');
+        info.className = 'project-info';
+
+        var name = document.createElement('div');
+        name.className = 'project-name';
+        name.appendChild(document.createTextNode(proj.name));
+
+        var tag = document.createElement('span');
+        tag.className = 'project-tag ' + (tagClass[proj.tag] || 'tag-ml');
+        tag.textContent = proj.tagLabel;
+        name.appendChild(tag);
+
+        var desc = document.createElement('div');
+        desc.className = 'project-desc';
+        desc.textContent = proj.desc;
+
+        info.appendChild(name);
+        info.appendChild(desc);
+
+        var right = document.createElement('div');
+        right.className = 'project-meta-right';
+
+        var period = document.createElement('span');
+        period.className = 'project-period';
+        period.textContent = proj.period;
+
+        var arrow = document.createElement('span');
+        arrow.className = 'project-arrow';
+        arrow.setAttribute('aria-hidden', 'true');
+        arrow.textContent = '→';
+
+        right.appendChild(period);
+        right.appendChild(arrow);
+
+        a.appendChild(index);
+        a.appendChild(info);
+        a.appendChild(right);
+
+        list.appendChild(a);
+      });
+    })();
   </script>
 </body>
 </html>

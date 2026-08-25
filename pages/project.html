@@ -1,0 +1,151 @@
+<!-- pages/project.html — single detail template, rendered from ?id= -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project — Sri Varshith</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+</head>
+<body data-page="projects">
+  <div class="grid-bg" aria-hidden="true"></div>
+
+  <div class="layout">
+
+    <div id="sidebar-root"></div>
+
+    <div class="main-col">
+
+      <header class="topbar">
+        <div class="topbar-left">
+          <div class="dots" aria-hidden="true">
+            <div class="dot dot-r"></div>
+            <div class="dot dot-y"></div>
+            <div class="dot dot-g"></div>
+          </div>
+          <span class="topbar-path" id="crumb">
+            <a href="../index.html">~/portfolio</a> / projects
+          </span>
+        </div>
+        <div class="topbar-right">
+          <span class="online-status">
+            <span class="online-dot" aria-hidden="true"></span>online
+          </span>
+        </div>
+      </header>
+
+      <a class="back-link" href="projects.html">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 12H5m7-7-7 7 7 7"/></svg>
+        back to projects
+      </a>
+
+      <div id="project-root"></div>
+
+    </div>
+  </div>
+
+  <script src="../components/sidebar.js"></script>
+  <script src="../components/projects-data.js"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      var TAG_CLASS = window.PROJECT_TAG_CLASS || {};
+      var root = document.getElementById('project-root');
+
+      function param(name) {
+        var match = new RegExp('[?&]' + name + '=([^&#]*)').exec(window.location.search);
+        return match ? decodeURIComponent(match[1].replace(/\+/g, ' ')) : null;
+      }
+
+      function esc(s) {
+        return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      }
+
+      var id = param('id');
+      var project = (window.PROJECTS || []).filter(function (p) { return p.id === id; })[0];
+
+      if (!project) {
+        document.title = 'Project not found — Sri Varshith';
+        root.innerHTML =
+          '<div class="detail-header">' +
+            '<h1 class="detail-title">Project not found</h1>' +
+            '<p class="detail-tagline">' +
+              'There is no project with that id. Head back to the index to see everything.' +
+            '</p>' +
+          '</div>' +
+          '<div class="detail-links">' +
+            '<a class="btn btn-primary" href="projects.html">All projects</a>' +
+          '</div>';
+        return;
+      }
+
+      document.title = project.name + ' — Sri Varshith';
+
+      document.getElementById('crumb').innerHTML =
+        '<a href="../index.html">~/portfolio</a> / <a href="projects.html">projects</a> / ' + esc(project.id);
+
+      var statusDotClass = project.status === 'active' ? 'detail-status-dot active' : 'detail-status-dot';
+
+      var html = '';
+
+      /* ── Header ── */
+      html += '<div class="detail-header">';
+      html +=   '<div class="detail-meta">';
+      html +=     '<span class="project-tag ' + (TAG_CLASS[project.tag] || 'tag-ml') + '">' + esc(project.tagLabel) + '</span>';
+      html +=     '<span class="pill neutral">' + esc(project.kind) + '</span>';
+      html +=     '<span class="post-date">' + esc(project.period) + '</span>';
+      html +=     '<span class="detail-status"><span class="' + statusDotClass + '"></span>' + esc(project.status) + '</span>';
+      html +=   '</div>';
+      html +=   '<h1 class="detail-title">' + esc(project.name) + '</h1>';
+      html +=   '<p class="detail-tagline">' + esc(project.tagline) + '</p>';
+      html += '</div>';
+
+      /* ── Metrics ── */
+      if (project.metrics && project.metrics.length) {
+        html += '<div class="detail-links"><div class="metric-row" style="width:100%;">';
+        project.metrics.forEach(function (m) {
+          html += '<div class="metric-card">' +
+                    '<div class="metric-val ' + (m.color || '') + '">' + esc(m.val) + '</div>' +
+                    '<div class="metric-label">' + esc(m.label) + '</div>' +
+                  '</div>';
+        });
+        html += '</div></div>';
+      }
+
+      /* ── Body ── */
+      html += '<div class="detail-body">';
+
+      html +=   '<div class="section">';
+      html +=     '<div class="section-label">overview</div>';
+      project.overview.forEach(function (p) { html += '<p>' + p + '</p>'; });
+      if (project.note) {
+        html += '<p style="font-size:12.5px;color:var(--text-dim);">' + esc(project.note) + '</p>';
+      }
+      html +=   '</div>';
+
+      html +=   '<div class="section">';
+      html +=     '<div class="section-label">what it does</div>';
+      html +=     '<ul class="feature-list">';
+      project.highlights.forEach(function (h) { html += '<li>' + h + '</li>'; });
+      html +=     '</ul>';
+      html +=   '</div>';
+
+      html +=   '<div class="section">';
+      html +=     '<div class="section-label">tech stack</div>';
+      html +=     '<div class="tech-pills">';
+      project.stack.forEach(function (t) { html += '<span class="pill neutral">' + esc(t) + '</span>'; });
+      html +=     '</div>';
+      html +=   '</div>';
+
+      html += '</div>';
+
+      root.innerHTML = html;
+    })();
+  </script>
+</body>
+</html>
